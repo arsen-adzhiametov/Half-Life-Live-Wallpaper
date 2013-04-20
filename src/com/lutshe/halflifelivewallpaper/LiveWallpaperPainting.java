@@ -1,10 +1,7 @@
 package com.lutshe.halflifelivewallpaper;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
+import android.graphics.*;
 import android.view.SurfaceHolder;
 import com.halflifelivewallpaper.R;
 
@@ -25,19 +22,95 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     int height;
 
 
-    public List<Bubble> bubbles = new ArrayList();
+    public List<Ash> ashs = new ArrayList();
     Random random = new Random(10);
-
+    Context context;
     Bitmap bg;
-    private Bitmap snowflake;
+    private Bitmap ash;
 
     public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context) {
         this.surfaceHolder = surfaceHolder;
         this.wait = true;
-
-        snowflake = BitmapFactory.decodeResource(context.getResources(), R.drawable.snow_flake);
-        bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.b);
+        this.context = context;
+        ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash1);
+        bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.ep1background020017);
     }
+
+
+    /**
+     * Invoke when the surface dimension change
+     *
+     * @param width
+     * @param height
+     */
+    public void setSurfaceSize(int width, int height) {
+        System.out.println(width + "x" + height);
+        this.width = width;
+        this.height = height;
+        synchronized (this) {
+            this.notify();
+
+            ash = Bitmap.createScaledBitmap(ash, width / 10, width / 10, true);
+            bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.ep1background020017);
+
+            if (width < height) {
+                System.out.println(bg.getWidth() + " " + bg.getHeight());
+                bg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / 1.8), height, true);
+                System.out.println(bg.getWidth() + " " + bg.getHeight());
+            } else {
+                System.out.println(bg.getWidth() + " " + bg.getHeight());
+                bg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / 2.4), (int) (height * 1.2), true);
+                System.out.println(bg.getWidth() + " " + bg.getHeight());
+            }
+        }
+    }
+
+    @Override
+    public void run() {
+        this.run = true;
+        Canvas c = null;
+        while (run) {
+            try {
+                c = this.surfaceHolder.lockCanvas(null);
+                synchronized (this.surfaceHolder) {
+                    c.translate(dx, 0);
+                    Thread.sleep(40);
+                    if (random.nextInt(11) % 5 == 0)
+                        ashs.add(new Ash(this, ash));
+                    doDraw(c);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                if (c != null) {
+                    this.surfaceHolder.unlockCanvasAndPost(c);
+                }
+            }
+            // pause if no need to animate
+            synchronized (this) {
+                if (wait) {
+                    try {
+                        wait();
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        }
+    }
+
+    private void doDraw(Canvas canvas) {
+        canvas.drawColor(Color.WHITE);
+        canvas.drawBitmap(bg, 0, 0, null);
+        for (int i = 0; i < ashs.size(); i++) {
+            if (ashs.get(i).y < bg.getHeight() && ashs.get(i).x < bg.getWidth())
+                ashs.get(i).onDraw(canvas);
+            else {
+//                ashs.remove(i);
+            }
+        }
+
+    }
+
 
     /**
      * Pauses the livewallpaper animation
@@ -69,71 +142,5 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        this.run = true;
-        Canvas c = null;
-        while (run) {
-            try {
-                c = this.surfaceHolder.lockCanvas(null);
-                synchronized (this.surfaceHolder) {
-                    c.translate(dx, 0);
-                    Thread.sleep(40);
-                    if (random.nextInt(11) % 5 == 0)
-                        bubbles.add(new Bubble(this, snowflake));
-                    doDraw(c);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                if (c != null) {
-                    this.surfaceHolder.unlockCanvasAndPost(c);
-                }
-            }
-            // pause if no need to animate
-            synchronized (this) {
-                if (wait) {
-                    try {
-                        wait();
-                    } catch (Exception e) {
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Invoke when the surface dimension change
-     *
-     * @param width
-     * @param height
-     */
-    public void setSurfaceSize(int width, int height) {
-        this.width = width;
-        this.height = height;
-        synchronized (this) {
-            this.notify();
-            bg = Bitmap.createScaledBitmap(bg, (int)(width*1.4), height, true);
-        }
-    }
-
-
-    private void doDraw(Canvas canvas) {
-        canvas.drawColor(Color.WHITE);
-        canvas.drawBitmap(bg, 0, 0, null);
-//        System.out.println(bubbles.size());
-        for (int i = 0; i < bubbles.size(); i++) {
-            if (bubbles.get(i).y < bg.getHeight() && bubbles.get(i).x < bg.getWidth())
-                bubbles.get(i).onDraw(canvas);
-            else {
-//                bubbles.remove(i);
-            }
-        }
-
-    }
-
-    private void doRandomWind() {
-
-    }
 
 }

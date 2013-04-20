@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 
 import java.util.Random;
 
-public class Bubble
+public class Ash
 {
 	public int x;
 	public int y;
@@ -15,16 +15,19 @@ public class Bubble
 	Bitmap bitmap;
 	LiveWallpaperPainting painting;
 	
-	public Bubble(LiveWallpaperPainting pm, Bitmap bitmap) {
+	public Ash(LiveWallpaperPainting pm, Bitmap bitmap) {
+        Random rnd = new Random(System.currentTimeMillis());
+
 		this.painting = pm;
-		this.bitmap = bitmap;
+        int ashScale = rnd.nextInt(45) + 15;
+        this.bitmap = Bitmap.createScaledBitmap(bitmap, ashScale,ashScale, true);
 		
-		Random rnd = new Random(System.currentTimeMillis());
+
 		this.x = rnd.nextInt(480 + 300) - 300;
         if (x > 0) this.y = rnd.nextInt(480) - 480;
         else this.y = rnd.nextInt(800 + 480) - 480;
 		
-		this.speed = rnd.nextInt(10) + 5;
+		this.speed = ashScale/3;
 		
 		angle = getRandomAngle();
 	}
