@@ -2,6 +2,7 @@ package com.lutshe.halflifelivewallpaper;
 
 import android.content.Context;
 import android.graphics.*;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import com.halflifelivewallpaper.R;
 
@@ -10,6 +11,8 @@ import java.util.List;
 import java.util.Random;
 
 public class LiveWallpaperPainting extends Thread implements Runnable {
+
+    public static final String LUTSHE = "lutshe";
 
     private SurfaceHolder surfaceHolder;
 
@@ -28,14 +31,14 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     private final Bitmap ash;
 
     Bitmap scaledBg;
-    Bitmap scaledAsh;
 
     public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context) {
         this.surfaceHolder = surfaceHolder;
         this.wait = true;
         this.context = context;
         ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.untitled1);
-        bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.ep1background020017);
+        bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
+        Log.i(LUTSHE, "background init "+bg.getWidth()+"x"+bg.getHeight()+" ash init "+ash.getWidth()+"x"+ash.getHeight());
     }
 
     /**
@@ -45,6 +48,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
      * @param height
      */
     public void setSurfaceSize(int width, int height) {
+        Log.i(LUTSHE, "screen orientation " + width + "x" + height);
         this.width = width;
         this.height = height;
         synchronized (this) {
@@ -53,13 +57,11 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             scaledBg = this.bg;
 
             if (width < height) {
-
-                scaledBg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / 1.8), height, true);
-
+                scaledBg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / ((float)bg.getHeight()/height)), height, true);
+                Log.i(LUTSHE, "vertical, new background size "+scaledBg.getWidth()+"x"+scaledBg.getHeight());
             } else {
-
-                scaledBg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / 2.4), (int) (height * 1.2), true);
-
+                scaledBg = Bitmap.createScaledBitmap(bg, width, (int) (bg.getHeight() / ((float)bg.getWidth()/width)), true);
+                Log.i(LUTSHE, "horizontal, new background size "+scaledBg.getWidth()+"x"+scaledBg.getHeight());
             }
         }
     }

@@ -4,10 +4,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.util.Log;
 
 import java.util.Random;
 
 public class Ash {
+
+    public static final String ASH = "ash";
 
     public int x;
     public int y;
@@ -27,7 +30,7 @@ public class Ash {
         this.width = painting.width;
         this.height = painting.height;
 
-        int ashScale = getRandomAshScaleFromScreenSize();
+        int ashScale = random.nextInt(3 * 15) + 15;
         this.ash = Bitmap.createScaledBitmap(ash, ashScale, ashScale, true);
 
         this.x = random.nextInt(width + width) - width;
@@ -35,8 +38,9 @@ public class Ash {
         else this.y = random.nextInt(height + width) - width;
 
         this.speed = ashScale / 3;
-        this.angle = getRandomAngle();
+        this.angle = 90;
         rotate(random.nextInt(270));
+        Log.i(ASH, "ash created: scale=" + ashScale + "; speed=" + speed + " size=" + this.ash.getWidth() + "x" + this.ash.getHeight());
     }
 
     public void update() {
@@ -45,8 +49,8 @@ public class Ash {
     }
 
     private int getRandomAngle() {
-//        return random.nextInt(1) * 90 + 90 / 2 + random.nextInt(15) + 5;
-        return 90;
+        return random.nextInt(1) * 90 + 90 / 2 + random.nextInt(15) + 5;
+//        return 90;
     }
 
     public void onDraw(Canvas c) {
