@@ -32,7 +32,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         this.surfaceHolder = surfaceHolder;
         this.wait = true;
         this.context = context;
-        ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash1);
+        ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.untitled1);
         bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.ep1background020017);
     }
 
