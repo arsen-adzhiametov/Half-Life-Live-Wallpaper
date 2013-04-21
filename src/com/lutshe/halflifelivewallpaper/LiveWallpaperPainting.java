@@ -13,20 +13,22 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
 
     private SurfaceHolder surfaceHolder;
 
-    float dx = 0.0f;
-
     private boolean wait;
     private boolean run;
 
     int width;
     int height;
+    float dx = 0.0f;
 
+    private List<Ash> ashs = new ArrayList();
+    private Random random = new Random(10);
+    private Context context;
 
-    public List<Ash> ashs = new ArrayList();
-    Random random = new Random(10);
-    Context context;
-    Bitmap bg;
-    private Bitmap ash;
+    private final Bitmap bg;
+    private final Bitmap ash;
+
+    Bitmap scaledBg;
+    Bitmap scaledAsh;
 
     public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context) {
         this.surfaceHolder = surfaceHolder;
@@ -36,7 +38,6 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.ep1background020017);
     }
 
-
     /**
      * Invoke when the surface dimension change
      *
@@ -44,23 +45,21 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
      * @param height
      */
     public void setSurfaceSize(int width, int height) {
-        System.out.println(width + "x" + height);
         this.width = width;
         this.height = height;
         synchronized (this) {
             this.notify();
 
-            ash = Bitmap.createScaledBitmap(ash, width / 10, width / 10, true);
-            bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.ep1background020017);
+            scaledBg = this.bg;
 
             if (width < height) {
-                System.out.println(bg.getWidth() + " " + bg.getHeight());
-                bg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / 1.8), height, true);
-                System.out.println(bg.getWidth() + " " + bg.getHeight());
+
+                scaledBg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / 1.8), height, true);
+
             } else {
-                System.out.println(bg.getWidth() + " " + bg.getHeight());
-                bg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / 2.4), (int) (height * 1.2), true);
-                System.out.println(bg.getWidth() + " " + bg.getHeight());
+
+                scaledBg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / 2.4), (int) (height * 1.2), true);
+
             }
         }
     }
@@ -73,8 +72,8 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             try {
                 c = this.surfaceHolder.lockCanvas(null);
                 synchronized (this.surfaceHolder) {
-                    c.translate(dx, 0);
-                    Thread.sleep(40);
+
+                    Thread.sleep(50);
                     if (random.nextInt(11) % 5 == 0)
                         ashs.add(new Ash(this, ash));
                     doDraw(c);
@@ -100,17 +99,16 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
 
     private void doDraw(Canvas canvas) {
         canvas.drawColor(Color.WHITE);
-        canvas.drawBitmap(bg, 0, 0, null);
+        canvas.translate(dx, 0);
+        canvas.drawBitmap(scaledBg, 0, 0, null);
         for (int i = 0; i < ashs.size(); i++) {
-            if (ashs.get(i).y < bg.getHeight() && ashs.get(i).x < bg.getWidth())
+            if (ashs.get(i).y < scaledBg.getHeight() && ashs.get(i).x < scaledBg.getWidth())
                 ashs.get(i).onDraw(canvas);
             else {
-//                ashs.remove(i);
+                ashs.remove(i);
             }
         }
-
     }
-
 
     /**
      * Pauses the livewallpaper animation
