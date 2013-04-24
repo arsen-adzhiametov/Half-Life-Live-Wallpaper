@@ -75,7 +75,7 @@ public class LiveWallpaperService extends WallpaperService {
                                      float yStep,
                                      int xPixels,
                                      int yPixels) {
-            painting.dx = (painting.width - painting.scaledBg.getWidth()) * xOffset;
+            painting.dx = (painting.width - (painting.bg.getWidth()*painting.scale)) * xOffset;
         }
 
         @Override

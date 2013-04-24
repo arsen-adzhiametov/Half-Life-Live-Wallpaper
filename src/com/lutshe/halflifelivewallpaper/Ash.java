@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.util.Log;
 
 import java.util.Random;
 
@@ -30,17 +29,17 @@ public class Ash {
         this.width = painting.width;
         this.height = painting.height;
 
-        int ashScale = random.nextInt(3 * 15) + 15;
+        int ashScale = random.nextInt(3 * 10) + 10;
         this.ash = Bitmap.createScaledBitmap(ash, ashScale, ashScale, true);
 
         this.x = random.nextInt(width + width) - width;
-        if (x > 0) this.y = random.nextInt(width) - width;
-        else this.y = random.nextInt(height + width) - width;
+        if (x > 0) this.y = random.nextInt(height) - height;
+        else this.y = random.nextInt(height);
 
         this.speed = ashScale / 3;
         this.angle = 90;
         rotate(random.nextInt(270));
-        Log.i(ASH, "ash created: scale=" + ashScale + "; speed=" + speed + " size=" + this.ash.getWidth() + "x" + this.ash.getHeight());
+//        Log.i(ASH, "ash created: scale=" + ashScale + "; speed=" + speed + " size=" + this.ash.getWidth() + "x" + this.ash.getHeight());
     }
 
     public void update() {
@@ -48,10 +47,6 @@ public class Ash {
         x += Math.abs(speed * Math.sin(angle));
     }
 
-    private int getRandomAngle() {
-        return random.nextInt(1) * 90 + 90 / 2 + random.nextInt(15) + 5;
-//        return 90;
-    }
 
     public void onDraw(Canvas c) {
         update();
@@ -69,6 +64,11 @@ public class Ash {
                 throw ex;
             }
         }
+    }
+
+    private int getRandomAngle() {
+        return random.nextInt(1) * 90 + 90 / 2 + random.nextInt(15) + 5;
+//        return 90;
     }
 
     private static int getRandomAshScaleFromScreenSize() {
