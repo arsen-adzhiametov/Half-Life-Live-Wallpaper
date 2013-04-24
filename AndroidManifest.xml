@@ -9,7 +9,7 @@
             android:icon="@drawable/game"
             android:label="@string/app_name">
         <service
-                android:name="com.lutshe.halflifelivewallpaper.LiveWallpaperService"
+                android:name="com.lutshe.wallpaper.live.halflife.LiveWallpaperService"
                 android:enabled="true"
                 android:icon="@drawable/game"
                 android:label="@string/app_name"

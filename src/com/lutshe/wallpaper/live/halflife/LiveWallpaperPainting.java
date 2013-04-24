@@ -1,4 +1,4 @@
-package com.lutshe.halflifelivewallpaper;
+package com.lutshe.wallpaper.live.halflife;
 
 import android.content.Context;
 import android.graphics.*;
