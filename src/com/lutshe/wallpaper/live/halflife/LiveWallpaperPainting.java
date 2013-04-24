@@ -1,10 +1,12 @@
 package com.lutshe.wallpaper.live.halflife;
 
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import com.halflifelivewallpaper.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +34,20 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     final Bitmap bg;
     private final Bitmap ash;
 
-//    Bitmap scaledBg;
+    Bitmap scaledBg;
 
     public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context) {
         this.surfaceHolder = surfaceHolder;
         this.wait = true;
         this.context = context;
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        options.inDither = false;
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
         ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash);
-        bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
+        bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.background, options);
         Log.i(LUTSHE, "background init "+bg.getWidth()+"x"+bg.getHeight()+" ash init "+ash.getWidth()+"x"+ash.getHeight());
     }
 
@@ -56,16 +64,16 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         synchronized (this) {
             this.notify();
 
-//            scaledBg = this.bg;
+            scaledBg = this.bg;
 
             if (width < height) {
                 scale = height / (1.0f*bg.getHeight());
-//                scaledBg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / ((float)bg.getHeight()/height)), height, true);
-//                Log.i(LUTSHE, "vertical, new background size "+scaledBg.getWidth()+"x"+scaledBg.getHeight());
+                scaledBg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / ((float)bg.getHeight()/height)), height, true);
+                Log.i(LUTSHE, "vertical, new background size "+scaledBg.getWidth()+"x"+scaledBg.getHeight());
             } else {
                 scale = width / (1.0f*bg.getWidth());
-//                scaledBg = Bitmap.createScaledBitmap(bg, width, (int) (bg.getHeight() / ((float)bg.getWidth()/width)), true);
-//                Log.i(LUTSHE, "horizontal, new background size "+scaledBg.getWidth()+"x"+scaledBg.getHeight());
+                scaledBg = Bitmap.createScaledBitmap(bg, width, (int) (bg.getHeight() / ((float)bg.getWidth()/width)), true);
+                Log.i(LUTSHE, "horizontal, new background size "+scaledBg.getWidth()+"x"+scaledBg.getHeight());
             }
         }
     }
@@ -111,8 +119,14 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     private void doDraw(Canvas canvas) {
         canvas.drawColor(Color.WHITE);
         canvas.translate(dx, 0);
-        canvas.scale(scale, scale);
-        canvas.drawBitmap(bg, 0, 0, null);
+//        canvas.scale(scale, scale);
+        canvas.drawBitmap(scaledBg, 0, 0, null);
+//        Paint paint = new Paint();
+//        paint.setColor(Color.CYAN);
+//        paint.setTextSize(10);
+//        canvas.drawText("background init "+bg.getWidth()+"x"+bg.getHeight(), 150f, 150f, paint);
+//        canvas.drawText("screen orientation changed" + width + "x" + height, 150f, 165f, paint);
+//        canvas.drawText("new background size "+scaledBg.getWidth()+"x"+scaledBg.getHeight(), 150f, 180f, paint);
         for (int i = 0; i < ashs.size(); i++) {
             if (ashs.get(i).y < bg.getHeight() && ashs.get(i).x < bg.getWidth())
                 ashs.get(i).onDraw(canvas);

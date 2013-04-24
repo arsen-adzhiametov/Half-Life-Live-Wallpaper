@@ -35,7 +35,7 @@ public class Ash {
         this.x = random.nextInt(width + width) - width;
         if (x > 0) this.y = random.nextInt(height) - height;
         else this.y = random.nextInt(height);
-
+        paint.setAlpha(random.nextInt(100) + 100);
         this.speed = ashScale / 3;
         this.angle = 90;
         rotate(random.nextInt(270));
@@ -50,7 +50,7 @@ public class Ash {
 
     public void onDraw(Canvas c) {
         update();
-        paint.setAlpha(random.nextInt(100) + 100);
+
         c.drawBitmap(ash, x, y, paint);
     }
 
