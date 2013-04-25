@@ -3,6 +3,8 @@ package com.lutshe.wallpaper.live.halflife;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
+import java.io.IOException;
+
 public class LiveWallpaperService extends WallpaperService {
 
     @Override
@@ -26,7 +28,11 @@ public class LiveWallpaperService extends WallpaperService {
 
         SampleEngine() {
             SurfaceHolder holder = getSurfaceHolder();
-            painting = new LiveWallpaperPainting(holder, getApplicationContext());
+            try {
+                painting = new LiveWallpaperPainting(holder, getApplicationContext());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -53,7 +59,6 @@ public class LiveWallpaperService extends WallpaperService {
         public void onSurfaceCreated(SurfaceHolder holder) {
             super.onSurfaceCreated(holder);
             painting.start();
-
         }
 
 

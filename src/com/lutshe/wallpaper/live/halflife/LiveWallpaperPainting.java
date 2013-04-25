@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -31,15 +32,17 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     private Random random = new Random(10);
     private Context context;
 
-    final Bitmap bg;
     private final Bitmap ash;
-
+    Bitmap bg;
     Bitmap scaledBg;
+    private final BackgroundAnimationLayer animationLayer;
 
-    public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context) {
+    public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context) throws IOException {
         this.surfaceHolder = surfaceHolder;
         this.wait = true;
         this.context = context;
+
+        animationLayer = new BackgroundAnimationLayer(context);
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
@@ -47,7 +50,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
         ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash);
-        bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.background, options);
+        bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim1, options);
         Log.i(LUTSHE, "background init "+bg.getWidth()+"x"+bg.getHeight()+" ash init "+ash.getWidth()+"x"+ash.getHeight());
     }
 
@@ -72,7 +75,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
                 Log.i(LUTSHE, "vertical, new background size "+scaledBg.getWidth()+"x"+scaledBg.getHeight());
             } else {
                 scale = width / (1.0f*bg.getWidth());
-                scaledBg = Bitmap.createScaledBitmap(bg, width, (int) (bg.getHeight() / ((float)bg.getWidth()/width)), true);
+                scaledBg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / ((float)bg.getHeight()/height)), height, true);
                 Log.i(LUTSHE, "horizontal, new background size "+scaledBg.getWidth()+"x"+scaledBg.getHeight());
             }
         }
@@ -81,23 +84,23 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     @Override
     public void run() {
         this.run = true;
-        Canvas c = null;
+        Canvas canvas = null;
         while (run) {
             try {
-                c = this.surfaceHolder.lockCanvas(null);
+                canvas = this.surfaceHolder.lockCanvas(null);
                 synchronized (this.surfaceHolder) {
-
-                    Thread.sleep(50);
+                    Thread.sleep(70);
                     if (random.nextInt(11) % 5 == 0)
                         ashs.add(new Ash(this, ash));
-                    if (c!=null) doDraw(c);
+                    if (canvas!=null) doDraw(canvas);
                 }
             } catch (InterruptedException e) {
+                System.out.println("убать");
                 e.printStackTrace();
             } finally {
                 try {
-                    if (c != null) {
-                        surfaceHolder.unlockCanvasAndPost(c);
+                    if (canvas != null) {
+                        surfaceHolder.unlockCanvasAndPost(canvas);
                     }
 
                 } catch (IllegalArgumentException exception) {
@@ -121,14 +124,9 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         canvas.translate(dx, 0);
 //        canvas.scale(scale, scale);
         canvas.drawBitmap(scaledBg, 0, 0, null);
-//        Paint paint = new Paint();
-//        paint.setColor(Color.CYAN);
-//        paint.setTextSize(10);
-//        canvas.drawText("background init "+bg.getWidth()+"x"+bg.getHeight(), 150f, 150f, paint);
-//        canvas.drawText("screen orientation changed" + width + "x" + height, 150f, 165f, paint);
-//        canvas.drawText("new background size "+scaledBg.getWidth()+"x"+scaledBg.getHeight(), 150f, 180f, paint);
+        canvas.drawBitmap(animationLayer.getNextImage(), 0, 0, null);
         for (int i = 0; i < ashs.size(); i++) {
-            if (ashs.get(i).y < bg.getHeight() && ashs.get(i).x < bg.getWidth())
+            if (ashs.get(i).y < scaledBg.getHeight() && ashs.get(i).x < scaledBg.getWidth())
                 ashs.get(i).onDraw(canvas);
             else {
                 ashs.remove(i);
