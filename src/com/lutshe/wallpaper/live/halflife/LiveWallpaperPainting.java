@@ -20,17 +20,15 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     private SurfaceHolder surfaceHolder;
 
     private boolean wait;
-    private boolean run;
+    private volatile boolean run = true;
 
     int width;
     int height;
     float dx = 0.0f;
-
     float scale;
 
     private List<Ash> ashs = new ArrayList();
     private Random random = new Random(10);
-    private Context context;
 
     private final Bitmap ash;
     Bitmap bg;
@@ -40,18 +38,16 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context) throws IOException {
         this.surfaceHolder = surfaceHolder;
         this.wait = true;
-        this.context = context;
-
-        animationLayer = new BackgroundAnimationLayer(context);
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
         options.inDither = false;
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
-        ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash);
         bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim1, options);
-        Log.i(LUTSHE, "background init "+bg.getWidth()+"x"+bg.getHeight()+" ash init "+ash.getWidth()+"x"+ash.getHeight());
+        animationLayer = new BackgroundAnimationLayer(context, options);
+        ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash);
+        Log.i(LUTSHE, "background init " + bg.getWidth() + "x" + bg.getHeight() + " ash init " + ash.getWidth() + "x" + ash.getHeight());
     }
 
     /**
@@ -66,17 +62,14 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         this.height = height;
         synchronized (this) {
             this.notify();
-
             scaledBg = this.bg;
-
+            scaledBg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / ((float) bg.getHeight() / height)), height, true);
+            scale = scaledBg.getWidth() / (1.0f * bg.getWidth());
+            animationLayer.setActualSize(scale);
             if (width < height) {
-                scale = height / (1.0f*bg.getHeight());
-                scaledBg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / ((float)bg.getHeight()/height)), height, true);
-                Log.i(LUTSHE, "vertical, new background size "+scaledBg.getWidth()+"x"+scaledBg.getHeight());
+                Log.i(LUTSHE, "vertical, new background size " + scaledBg.getWidth() + "x" + scaledBg.getHeight());
             } else {
-                scale = width / (1.0f*bg.getWidth());
-                scaledBg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / ((float)bg.getHeight()/height)), height, true);
-                Log.i(LUTSHE, "horizontal, new background size "+scaledBg.getWidth()+"x"+scaledBg.getHeight());
+                Log.i(LUTSHE, "horizontal, new background size " + scaledBg.getWidth() + "x" + scaledBg.getHeight());
             }
         }
     }
@@ -89,10 +82,10 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             try {
                 canvas = this.surfaceHolder.lockCanvas(null);
                 synchronized (this.surfaceHolder) {
-                    Thread.sleep(70);
+                    Thread.sleep(50);
                     if (random.nextInt(11) % 5 == 0)
                         ashs.add(new Ash(this, ash));
-                    if (canvas!=null) doDraw(canvas);
+                    if (canvas != null) doDraw(canvas);
                 }
             } catch (InterruptedException e) {
                 System.out.println("убать");
@@ -101,6 +94,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
                 try {
                     if (canvas != null) {
                         surfaceHolder.unlockCanvasAndPost(canvas);
+//                        surfaceHolder.lockCanvas(); // Это взято отсюда http://stackoverflow.com/questions/12758703/illegalargumentexception-in-unlockcanvasandpost-android-live-wallpaper
                     }
 
                 } catch (IllegalArgumentException exception) {
@@ -113,6 +107,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
                     try {
                         wait();
                     } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -120,6 +115,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     }
 
     private void doDraw(Canvas canvas) {
+        canvas.save();
         canvas.drawColor(Color.WHITE);
         canvas.translate(dx, 0);
 //        canvas.scale(scale, scale);
@@ -132,6 +128,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
                 ashs.remove(i);
             }
         }
+        canvas.restore();
     }
 
     /**
@@ -163,6 +160,5 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             this.notify();
         }
     }
-
 
 }

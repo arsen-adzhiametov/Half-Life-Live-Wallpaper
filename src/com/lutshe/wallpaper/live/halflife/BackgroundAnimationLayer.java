@@ -8,45 +8,47 @@ import java.util.Random;
 
 public class BackgroundAnimationLayer {
 
-    private Context context;
-    private Bitmap img1;
-    private Bitmap img2;
-    private Bitmap img3;
+    private final Bitmap img1;
+    private final Bitmap img2;
+    private final Bitmap img3;
+
+    private Bitmap rImg1;
+    private Bitmap rImg2;
+    private Bitmap rImg3;
 
     Random random = new Random();
 
-    BackgroundAnimationLayer(Context context) {
-        this.context = context;
-        init();
+    BackgroundAnimationLayer(Context context, BitmapFactory.Options options) {
+        img1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim01, options);
+        img2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim02, options);
+        img3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim03, options);
+
+        setActualSize(1);
     }
 
-    private void init() {
-        img1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim01);
-        img2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim02);
-        img3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim03);
-
-        int width = (int)(img1.getWidth()/2.025f);
-        int height = (int)(img1.getHeight()/2.025f);
-
-        System.out.println("toppppp " + img1.getWidth() +"   " + img1.getHeight());
-
-        img1 = Bitmap.createScaledBitmap(img1, width, height, true);
-        img2 = Bitmap.createScaledBitmap(img2, width, height, true);
-        img3 = Bitmap.createScaledBitmap(img3, width, height, true);
+    public void setActualSize(float scale) {
+        rImg1 = Bitmap.createScaledBitmap(img1, (int) (img1.getWidth() * scale), (int) (img1.getHeight() * scale), true);
+        rImg2 = Bitmap.createScaledBitmap(img2, (int) (img1.getWidth() * scale), (int) (img1.getHeight() * scale), true);
+        rImg3 = Bitmap.createScaledBitmap(img3, (int) (img1.getWidth() * scale), (int) (img1.getHeight() * scale), true);
     }
+
 
     public Bitmap getNextImage() {
 
         int counter = random.nextInt(3);
 
-        switch (counter){
-            case 0: return img1;
+        switch (counter) {
+            case 0:
+                return rImg1;
 
-            case 1: return img2;
+            case 1:
+                return rImg2;
 
-            case 2: return img3;
+            case 2:
+                return rImg3;
 
-            default: return img1;
+            default:
+                return rImg1;
         }
     }
 }
