@@ -8,6 +8,8 @@ import java.util.Random;
 
 public class BackgroundAnimationLayer {
 
+    public static final String LUTSHE = "lutshe";
+
     private final Bitmap img1;
     private final Bitmap img2;
     private final Bitmap img3;
@@ -22,7 +24,6 @@ public class BackgroundAnimationLayer {
         img1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim01, options);
         img2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim02, options);
         img3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim03, options);
-
         setActualSize(1);
     }
 

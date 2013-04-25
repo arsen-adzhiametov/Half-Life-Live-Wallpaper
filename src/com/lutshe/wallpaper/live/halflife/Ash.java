@@ -11,10 +11,10 @@ public class Ash {
 
     public static final String ASH = "ash";
 
-    public int x;
-    public int y;
-    public int speed;
-    public double angle;
+    int x;
+    int y;
+    private int speed;
+    private double angle;
 
     private static int width;
     private static int height;
@@ -50,7 +50,6 @@ public class Ash {
 
     public void onDraw(Canvas c) {
         update();
-
         c.drawBitmap(ash, x, y, paint);
     }
 

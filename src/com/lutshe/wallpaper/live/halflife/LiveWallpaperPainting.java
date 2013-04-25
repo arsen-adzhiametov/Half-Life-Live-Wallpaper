@@ -43,6 +43,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         options.inScaled = false;
         options.inDither = false;
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//        options.inJustDecodeBounds =true;
 
         bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim1, options);
         animationLayer = new BackgroundAnimationLayer(context, options);
