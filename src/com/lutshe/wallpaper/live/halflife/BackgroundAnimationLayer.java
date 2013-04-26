@@ -13,10 +13,12 @@ public class BackgroundAnimationLayer {
     private final Bitmap img1;
     private final Bitmap img2;
     private final Bitmap img3;
+    private final Bitmap img4;
 
     private Bitmap rImg1;
     private Bitmap rImg2;
     private Bitmap rImg3;
+    private Bitmap rImg4;
 
     Random random = new Random();
 
@@ -24,6 +26,7 @@ public class BackgroundAnimationLayer {
         img1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim01, options);
         img2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim02, options);
         img3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim03, options);
+        img4 = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim04, options);
         setActualSize(1);
     }
 
@@ -31,12 +34,13 @@ public class BackgroundAnimationLayer {
         rImg1 = Bitmap.createScaledBitmap(img1, (int) (img1.getWidth() * scale), (int) (img1.getHeight() * scale), true);
         rImg2 = Bitmap.createScaledBitmap(img2, (int) (img1.getWidth() * scale), (int) (img1.getHeight() * scale), true);
         rImg3 = Bitmap.createScaledBitmap(img3, (int) (img1.getWidth() * scale), (int) (img1.getHeight() * scale), true);
+        rImg4 = Bitmap.createScaledBitmap(img4, (int) (img1.getWidth() * scale), (int) (img1.getHeight() * scale), true);
     }
 
 
     public Bitmap getNextImage() {
 
-        int counter = random.nextInt(3);
+        int counter = random.nextInt(10);
 
         switch (counter) {
             case 0:
@@ -47,6 +51,9 @@ public class BackgroundAnimationLayer {
 
             case 2:
                 return rImg3;
+
+            case 3:
+                return rImg4;
 
             default:
                 return rImg1;

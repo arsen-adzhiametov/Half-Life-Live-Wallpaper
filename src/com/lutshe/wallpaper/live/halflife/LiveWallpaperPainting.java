@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,7 +18,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
 
     private SurfaceHolder surfaceHolder;
 
-    private boolean wait;
+    private volatile boolean wait = false;
     private volatile boolean run = true;
 
     int width;
@@ -27,7 +26,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     float dx = 0.0f;
     float scale;
 
-    private List<Ash> ashs = new ArrayList();
+    private List<Ash> ashes = new ArrayList();
     private Random random = new Random(10);
 
     private final Bitmap ash;
@@ -35,20 +34,20 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     Bitmap scaledBg;
     private final BackgroundAnimationLayer animationLayer;
 
-    public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context) throws IOException {
+    public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context) {
         this.surfaceHolder = surfaceHolder;
         this.wait = true;
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
         options.inDither = false;
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
 //        options.inJustDecodeBounds =true;
 
         bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim1, options);
         animationLayer = new BackgroundAnimationLayer(context, options);
         ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash);
-        Log.i(LUTSHE, "background init " + bg.getWidth() + "x" + bg.getHeight() + " ash init " + ash.getWidth() + "x" + ash.getHeight());
+        Log.i(LUTSHE, "Engine constructoring finished. Background init " + bg.getWidth() + "x" + bg.getHeight() + " ash init " + ash.getWidth() + "x" + ash.getHeight());
     }
 
     /**
@@ -58,7 +57,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
      * @param height
      */
     public void setSurfaceSize(int width, int height) {
-        Log.i(LUTSHE, "screen orientation " + width + "x" + height);
+        Log.i(LUTSHE, "setScreenOrientation called with " + width + "x" + height);
         this.width = width;
         this.height = height;
         synchronized (this) {
@@ -68,24 +67,26 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             scale = scaledBg.getWidth() / (1.0f * bg.getWidth());
             animationLayer.setActualSize(scale);
             if (width < height) {
-                Log.i(LUTSHE, "vertical, new background size " + scaledBg.getWidth() + "x" + scaledBg.getHeight());
+                Log.i(LUTSHE, "vertical, new background size " + scaledBg.getWidth() + "x" + scaledBg.getHeight() + " is set");
             } else {
-                Log.i(LUTSHE, "horizontal, new background size " + scaledBg.getWidth() + "x" + scaledBg.getHeight());
+                Log.i(LUTSHE, "horizontal, new background size " + scaledBg.getWidth() + "x" + scaledBg.getHeight() + " is set");
             }
         }
     }
 
     @Override
     public void run() {
+        Log.i(LUTSHE, "running");
         this.run = true;
         Canvas canvas = null;
         while (run) {
+            Log.i(LUTSHE, "while cycle");
             try {
                 canvas = this.surfaceHolder.lockCanvas(null);
                 synchronized (this.surfaceHolder) {
                     Thread.sleep(50);
                     if (random.nextInt(11) % 5 == 0)
-                        ashs.add(new Ash(this, ash));
+                        ashes.add(new Ash(this, ash));
                     if (canvas != null) doDraw(canvas);
                 }
             } catch (InterruptedException e) {
@@ -106,7 +107,9 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             synchronized (this) {
                 if (wait) {
                     try {
+                        Log.i(LUTSHE, "WHILE cycle is waiting....");
                         wait();
+                        Log.i(LUTSHE, "WHILE cycle is woke up....");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -122,11 +125,11 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
 //        canvas.scale(scale, scale);
         canvas.drawBitmap(scaledBg, 0, 0, null);
         canvas.drawBitmap(animationLayer.getNextImage(), 0, 0, null);
-        for (int i = 0; i < ashs.size(); i++) {
-            if (ashs.get(i).y < scaledBg.getHeight() && ashs.get(i).x < scaledBg.getWidth())
-                ashs.get(i).onDraw(canvas);
+        for (int i = 0; i < ashes.size(); i++) {
+            if (ashes.get(i).y < scaledBg.getHeight() && ashes.get(i).x < scaledBg.getWidth())
+                ashes.get(i).onDraw(canvas);
             else {
-                ashs.remove(i);
+                ashes.remove(i);
             }
         }
         canvas.restore();
@@ -136,6 +139,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
      * Pauses the livewallpaper animation
      */
     public void pausePainting() {
+        Log.i(LUTSHE, "Pause painting, WAIT field set to true, notify() called ");
         this.wait = true;
         synchronized (this) {
             this.notify();
@@ -146,6 +150,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
      * Resume the livewallpaper animation
      */
     public void resumePainting() {
+        Log.i(LUTSHE, "Resume painting, WAIT field set to false, notify() called");
         this.wait = false;
         synchronized (this) {
             this.notify();
@@ -156,6 +161,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
      * Stop the livewallpaper animation
      */
     public void stopPainting() {
+        Log.i(LUTSHE, "Stop painting, WAIT field set to false, notify() called");
         this.run = false;
         synchronized (this) {
             this.notify();
