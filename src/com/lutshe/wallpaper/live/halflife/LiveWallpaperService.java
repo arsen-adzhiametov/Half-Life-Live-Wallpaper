@@ -7,11 +7,18 @@ import android.view.SurfaceHolder;
 public class LiveWallpaperService extends WallpaperService {
 
     public static final String LUTSHE = "lutshe";
+    private SampleEngine engine;
 
     @Override
     public Engine onCreateEngine() {
-        Log.i(LUTSHE, "onCreateEngine called in WallpaperService, new SampleEngine creating..,");
-        return new SampleEngine();
+        Log.i(LUTSHE, "onCreateEngine called in WallpaperService, new SampleEngine creating...");
+        if (engine != null) {
+            engine.painting.stopPainting();
+            engine = null;
+            Log.i(LUTSHE, "engine recreated successfully!");
+        }
+        engine = new SampleEngine();
+        return engine;
     }
 
     @Override

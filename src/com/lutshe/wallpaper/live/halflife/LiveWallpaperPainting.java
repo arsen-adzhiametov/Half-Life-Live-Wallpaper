@@ -80,7 +80,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         this.run = true;
         Canvas canvas = null;
         while (run) {
-            Log.i(LUTSHE, "while cycle");
+//            Log.i(LUTSHE, "while cycle");
             try {
                 canvas = this.surfaceHolder.lockCanvas(null);
                 synchronized (this.surfaceHolder) {
@@ -107,7 +107,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             synchronized (this) {
                 if (wait) {
                     try {
-                        Log.i(LUTSHE, "WHILE cycle is waiting....");
+                        Log.i(LUTSHE, "WHILE cycle is waiting.... in thread " + Thread.currentThread().getName());
                         wait();
                         Log.i(LUTSHE, "WHILE cycle is woke up....");
                     } catch (Exception e) {
@@ -161,7 +161,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
      * Stop the livewallpaper animation
      */
     public void stopPainting() {
-        Log.i(LUTSHE, "Stop painting, WAIT field set to false, notify() called");
+        Log.i(LUTSHE, "Stop painting, RUN field set to false, notify() called");
         this.run = false;
         synchronized (this) {
             this.notify();
