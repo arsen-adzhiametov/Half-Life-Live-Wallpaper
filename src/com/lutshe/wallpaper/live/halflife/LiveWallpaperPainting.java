@@ -23,7 +23,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
 
     int width;
     int height;
-    float dx = 0.0f;
+    volatile float dx = 0.0f;
     float scale;
 
     private List<Ash> ashes = new ArrayList();
@@ -41,12 +41,12 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
         options.inDither = false;
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;  //better image!!! tested on 5" display
 //        options.inJustDecodeBounds =true;
 
         bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim1, options);
         animationLayer = new BackgroundAnimationLayer(context, options);
-        ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash);
+        ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash, options);
         Log.i(LUTSHE, "Engine constructoring finished. Background init " + bg.getWidth() + "x" + bg.getHeight() + " ash init " + ash.getWidth() + "x" + ash.getHeight());
     }
 
@@ -90,7 +90,6 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
                     if (canvas != null) doDraw(canvas);
                 }
             } catch (InterruptedException e) {
-                System.out.println("убать");
                 e.printStackTrace();
             } finally {
                 try {
@@ -167,5 +166,4 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             this.notify();
         }
     }
-
 }
