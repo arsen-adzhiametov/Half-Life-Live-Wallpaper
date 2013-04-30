@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <string-array name="image_quality_names">
+        <item>Better, more CPU resources</item>
+        <item>Medium</item>
+    </string-array>
+
+    <string-array name="image_quality_values">
+        <item>true</item>
+        <item>false</item>
+    </string-array>
+
+</resources>

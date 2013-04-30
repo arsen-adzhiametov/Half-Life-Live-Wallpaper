@@ -22,24 +22,29 @@ public class Ash {
     private Bitmap ash;
     private static Paint paint = new Paint();
     private LiveWallpaperPainting painting;
-    private static Random random = new Random(System.currentTimeMillis());
+    private static Random random = new Random();
 
     public Ash(LiveWallpaperPainting pm, Bitmap ash) {
         this.painting = pm;
         this.width = painting.width;
         this.height = painting.height;
 
-        int ashScale = random.nextInt(3 * 10) + 10;
+        int ashScale = random.nextInt(2 * 10) + 10;
         this.ash = Bitmap.createScaledBitmap(ash, ashScale, ashScale, true);
 
-        this.x = random.nextInt(width + width) - width;
-        if (x > 0) this.y = random.nextInt(height) - height;
-        else this.y = random.nextInt(height);
+        setStartPoint(this);
+
         paint.setAlpha(random.nextInt(100) + 100);
         this.speed = ashScale / 3;
         this.angle = 90;
         rotate(random.nextInt(270));
 //        Log.i(ASH, "ash created: scale=" + ashScale + "; speed=" + speed + " size=" + this.ash.getWidth() + "x" + this.ash.getHeight());
+    }
+
+    static void setStartPoint(Ash ash) {
+        ash.x = random.nextInt(width + width) - width;
+        if (ash.x > 0) ash.y = random.nextInt(height) - height;
+        else ash.y = random.nextInt(height);
     }
 
     public void update() {

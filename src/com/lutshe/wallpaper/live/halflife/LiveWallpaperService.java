@@ -1,10 +1,14 @@
 package com.lutshe.wallpaper.live.halflife;
 
+import android.content.SharedPreferences;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class LiveWallpaperService extends WallpaperService {
+
+    public static final String PREFERENCES = "com.lutshe.wallpaper.live.halflife";
+    public static final String PREFERENCE_IMAGE = "preference_image";
 
     public static final String LUTSHE = "lutshe";
     private SampleEngine engine;
@@ -17,6 +21,7 @@ public class LiveWallpaperService extends WallpaperService {
             engine = null;
             Log.i(LUTSHE, "engine recreated successfully!");
         }
+//        Debug.startMethodTracing("halflifeRGB565");
         engine = new SampleEngine();
         return engine;
     }
@@ -30,16 +35,20 @@ public class LiveWallpaperService extends WallpaperService {
     @Override
     public void onDestroy() {
         Log.i(LUTSHE, "onDestroy method called in WallpaperService");
+//        Debug.stopMethodTracing();
         super.onDestroy();
     }
 
-    public class SampleEngine extends Engine {
+    public class SampleEngine extends Engine implements SharedPreferences.OnSharedPreferenceChangeListener {
 
         private LiveWallpaperPainting painting;
+        private SharedPreferences prefs;
 
         private SampleEngine() {
             SurfaceHolder holder = getSurfaceHolder();
-            painting = new LiveWallpaperPainting(holder, getApplicationContext());
+            prefs = LiveWallpaperService.this.getSharedPreferences(PREFERENCES, MODE_MULTI_PROCESS);
+            prefs.registerOnSharedPreferenceChangeListener(this);
+            painting = new LiveWallpaperPainting(holder, getApplicationContext(), Boolean.parseBoolean(prefs.getString(PREFERENCE_IMAGE, "false")));
             Log.i(LUTSHE, "new SampleEngine created");
         }
 
@@ -112,6 +121,10 @@ public class LiveWallpaperService extends WallpaperService {
             }
         }
 
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        }
     }
 
 }

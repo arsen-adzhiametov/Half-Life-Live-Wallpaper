@@ -10,7 +10,6 @@ import android.view.SurfaceHolder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class LiveWallpaperPainting extends Thread implements Runnable {
 
@@ -27,21 +26,26 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     float scale;
 
     private List<Ash> ashes = new ArrayList();
-    private Random random = new Random(10);
 
     private final Bitmap ash;
     Bitmap bg;
     Bitmap scaledBg;
     private final BackgroundAnimationLayer animationLayer;
 
-    public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context) {
+    public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context, boolean isBetterImage) {
         this.surfaceHolder = surfaceHolder;
         this.wait = true;
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
         options.inDither = false;
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;  //better image!!! tested on 5" display
+        if (isBetterImage) {
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;//better image!!! tested on 5" display
+            Log.i(LUTSHE, "ARGB_8888 color applying");
+        } else {
+            options.inPreferredConfig = Bitmap.Config.RGB_565;
+            Log.i(LUTSHE, "RGB_565 color applying");
+        }
 //        options.inJustDecodeBounds =true;
 
         bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim1, options);
@@ -85,7 +89,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
                 canvas = this.surfaceHolder.lockCanvas(null);
                 synchronized (this.surfaceHolder) {
                     Thread.sleep(50);
-                    if (random.nextInt(11) % 5 == 0)
+                    if (ashes.size() < 50)
                         ashes.add(new Ash(this, ash));
                     if (canvas != null) doDraw(canvas);
                 }
@@ -128,7 +132,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             if (ashes.get(i).y < scaledBg.getHeight() && ashes.get(i).x < scaledBg.getWidth())
                 ashes.get(i).onDraw(canvas);
             else {
-                ashes.remove(i);
+                Ash.setStartPoint(ashes.get(i));
             }
         }
         canvas.restore();
