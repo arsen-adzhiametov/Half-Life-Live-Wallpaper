@@ -44,7 +44,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             Log.i(LUTSHE, "ARGB_8888 color applying");
         } else {
             options.inPreferredConfig = Bitmap.Config.ARGB_4444;
-            Log.i(LUTSHE, "RGB_565 color applying");
+            Log.i(LUTSHE, "ARGB_4444 color applying");
         }
 //        options.inJustDecodeBounds =true;
 

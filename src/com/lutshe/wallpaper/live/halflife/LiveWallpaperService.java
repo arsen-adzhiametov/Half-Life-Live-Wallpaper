@@ -61,7 +61,7 @@ public class LiveWallpaperService extends WallpaperService {
 
         @Override
         public void onDestroy() {
-            Log.i(LUTSHE, "onCreate method called in SampleEngine");
+            Log.i(LUTSHE, "onDestroy method called in SampleEngine");
             super.onDestroy();
             // remove listeners and callbacks here
             painting.stopPainting();
