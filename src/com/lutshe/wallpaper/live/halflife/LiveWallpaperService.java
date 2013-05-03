@@ -17,7 +17,7 @@ public class LiveWallpaperService extends WallpaperService {
     public Engine onCreateEngine() {
         Log.i(LUTSHE, "onCreateEngine called in WallpaperService, new SampleEngine creating...");
         if (engine != null) {
-            engine.painting.stopPainting();
+            engine.painting.interrupt();
             engine = null;
             Log.i(LUTSHE, "engine recreated successfully!");
         }
@@ -96,12 +96,7 @@ public class LiveWallpaperService extends WallpaperService {
 
 
         @Override
-        public void onOffsetsChanged(float xOffset,
-                                     float yOffset,
-                                     float xStep,
-                                     float yStep,
-                                     int xPixels,
-                                     int yPixels) {
+        public void onOffsetsChanged(float xOffset, float yOffset, float xStep, float yStep, int xPixels, int yPixels) {
             painting.dx = (painting.width - (painting.scaledBg.getWidth())) * xOffset;
         }
 

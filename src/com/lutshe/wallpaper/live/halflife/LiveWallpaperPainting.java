@@ -43,7 +43,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;//better image!!! tested on 5" display
             Log.i(LUTSHE, "ARGB_8888 color applying");
         } else {
-            options.inPreferredConfig = Bitmap.Config.RGB_565;
+            options.inPreferredConfig = Bitmap.Config.ARGB_4444;
             Log.i(LUTSHE, "RGB_565 color applying");
         }
 //        options.inJustDecodeBounds =true;
@@ -80,7 +80,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
 
     @Override
     public void run() {
-        Log.i(LUTSHE, "running");
+        Log.i(LUTSHE, "running in thread " + Thread.currentThread().getName());
         this.run = true;
         Canvas canvas = null;
         while (run) {
@@ -112,7 +112,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
                     try {
                         Log.i(LUTSHE, "WHILE cycle is waiting.... in thread " + Thread.currentThread().getName());
                         wait();
-                        Log.i(LUTSHE, "WHILE cycle is woke up....");
+                        Log.i(LUTSHE, "WHILE cycle is woke up.... in thread " + Thread.currentThread().getName());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -128,11 +128,13 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
 //        canvas.scale(scale, scale);
         canvas.drawBitmap(scaledBg, 0, 0, null);
         canvas.drawBitmap(animationLayer.getNextImage(), 0, 0, null);
+
         for (int i = 0; i < ashes.size(); i++) {
-            if (ashes.get(i).y < scaledBg.getHeight() && ashes.get(i).x < scaledBg.getWidth())
-                ashes.get(i).onDraw(canvas);
+            Ash ash = ashes.get(i);
+            if (ash.y < scaledBg.getHeight() && ash.x < scaledBg.getWidth())
+                ash.onDraw(canvas);
             else {
-                Ash.setStartPoint(ashes.get(i));
+                ash.setStartPosition();
             }
         }
         canvas.restore();
@@ -142,7 +144,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
      * Pauses the livewallpaper animation
      */
     public void pausePainting() {
-        Log.i(LUTSHE, "Pause painting, WAIT field set to true, notify() called ");
+        Log.i(LUTSHE, "Pause painting, WAIT field set to true, notify() called in Thread " + Thread.currentThread().getName());
         this.wait = true;
         synchronized (this) {
             this.notify();
@@ -153,7 +155,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
      * Resume the livewallpaper animation
      */
     public void resumePainting() {
-        Log.i(LUTSHE, "Resume painting, WAIT field set to false, notify() called");
+        Log.i(LUTSHE, "Resume painting, WAIT field set to false, notify() called in Thread " + Thread.currentThread().getName());
         this.wait = false;
         synchronized (this) {
             this.notify();
@@ -164,7 +166,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
      * Stop the livewallpaper animation
      */
     public void stopPainting() {
-        Log.i(LUTSHE, "Stop painting, RUN field set to false, notify() called");
+        Log.i(LUTSHE, "Stop painting, RUN field set to false, notify() called in Thread " + Thread.currentThread().getName());
         this.run = false;
         synchronized (this) {
             this.notify();
