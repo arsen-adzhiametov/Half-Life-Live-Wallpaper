@@ -38,8 +38,9 @@ public class Ash {
     }
 
     void setStartPosition() {
-        x = random.nextInt(width / 2) - width / 2;
-        y = random.nextInt(height + height / 2) - height / 2;
+        x = random.nextInt(width + width) - width;
+        if (x > 0) y = random.nextInt(height) - height;
+        else y = random.nextInt(height);
     }
 
     public void updatePosition() {
@@ -58,6 +59,10 @@ public class Ash {
             m.setRotate(degrees, (float) ash.getWidth() / 2, (float) ash.getHeight() / 2);
             ash = Bitmap.createBitmap(ash, 0, 0, ash.getWidth(), ash.getHeight(), m, true);
         }
+    }
+
+    public void recycleBitmap() {
+        ash.recycle();
     }
 
 }

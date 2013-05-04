@@ -59,4 +59,16 @@ public class BackgroundAnimationLayer {
                 return rImg1;
         }
     }
+
+    public void recycleBitmap() {
+        img1.recycle();
+        img2.recycle();
+        img3.recycle();
+        img4.recycle();
+
+        rImg1.recycle();
+        rImg2.recycle();
+        rImg3.recycle();
+        rImg4.recycle();
+    }
 }

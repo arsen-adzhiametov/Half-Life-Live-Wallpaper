@@ -65,6 +65,7 @@ public class LiveWallpaperService extends WallpaperService {
             super.onDestroy();
             // remove listeners and callbacks here
             painting.stopPainting();
+            painting.interrupt();
         }
 
         @Override
@@ -79,7 +80,6 @@ public class LiveWallpaperService extends WallpaperService {
             Log.i(LUTSHE, "onSurfaceCreated method called in SampleEngine");
             super.onSurfaceCreated(holder);
             painting.start();
-            Log.i(LUTSHE, "Runnable started");
         }
 
 
