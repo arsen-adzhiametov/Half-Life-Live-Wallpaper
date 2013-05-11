@@ -1,16 +1,17 @@
-package com.lutshe.wallpaper.live.halflife;
+package com.lutshe.wallpaper.live.halflife.elements;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import com.lutshe.wallpaper.live.halflife.LiveWallpaperPainting;
 
 import java.util.Random;
 
 public class Ash {
 
-    int x;
-    int y;
+    public int x;
+    public int y;
     private int speed;
     private double angle;
     private double dX;
@@ -37,7 +38,7 @@ public class Ash {
         dY = Math.abs(speed * Math.cos(angle));
     }
 
-    void setStartPosition() {
+    public void setStartPosition() {
         x = random.nextInt(width + width) - width;
         if (x > 0) y = random.nextInt(height) - height;
         else y = random.nextInt(height);

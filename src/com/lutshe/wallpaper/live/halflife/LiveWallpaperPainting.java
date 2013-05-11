@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.SurfaceHolder;
+import com.lutshe.wallpaper.live.halflife.elements.Ash;
+import com.lutshe.wallpaper.live.halflife.elements.Cloud;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +22,19 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     private volatile boolean wait = false;
     private volatile boolean run = true;
 
-    int width;
-    int height;
+    public int width;
+    public int height;
     volatile float dx = 0.0f;
     float scale;
 
     private List<Ash> ashes = new ArrayList();
+    private List<Cloud> cloudRing = new ArrayList();
 
     private final Bitmap ash;
+    private final Bitmap cloud;
+    Bitmap tower;
     Bitmap bg;
     Bitmap scaledBg;
-    private final BackgroundAnimationLayer animationLayer;
 
     public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context, boolean isBetterImage) {
         this.surfaceHolder = surfaceHolder;
@@ -46,12 +50,34 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             options.inPreferredConfig = Bitmap.Config.ARGB_4444;
             Log.i(LUTSHE, "ARGB_4444 color applying");
         }
-//        options.inJustDecodeBounds =true;
 
-        bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.anim1, options);
-        animationLayer = new BackgroundAnimationLayer(context, options);
+        tower = BitmapFactory.decodeResource(context.getResources(), R.drawable.tower, options);
         ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash, options);
+        cloud = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky, options);
+        bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.newversionmy, options);
+
+        loadResourcesToMemory();
+
+
         Log.i(LUTSHE, "Engine constructoring finished. Background init " + bg.getWidth() + "x" + bg.getHeight() + " ash init " + ash.getWidth() + "x" + ash.getHeight());
+    }
+
+    private void loadResourcesToMemory() {
+        int radius = 150;
+        cloudRing.add(new Cloud(cloud, 0, radius, true));
+        cloudRing.add(new Cloud(cloud, 50, radius, true));
+        cloudRing.add(new Cloud(cloud, 100, radius, true));
+        cloudRing.add(new Cloud(cloud, 150, radius, true));
+        cloudRing.add(new Cloud(cloud, 200, radius, true));
+        cloudRing.add(new Cloud(cloud, 250, radius, true));
+        cloudRing.add(new Cloud(cloud, 300, radius, true));
+        cloudRing.add(new Cloud(cloud, 350, radius, true));
+
+        radius = 80;
+        cloudRing.add(new Cloud(cloud, 0, radius, false));
+        cloudRing.add(new Cloud(cloud, 100, radius, false));
+        cloudRing.add(new Cloud(cloud, 200, radius, false));
+        cloudRing.add(new Cloud(cloud, 300, radius, false));
     }
 
     /**
@@ -69,7 +95,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             scaledBg = this.bg;
             scaledBg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / ((float) bg.getHeight() / height)), height, true);
             scale = scaledBg.getWidth() / (1.0f * bg.getWidth());
-            animationLayer.setActualSize(scale);
+//            animationLayer.setActualSize(scale);
         }
     }
 
@@ -121,7 +147,12 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         canvas.translate(dx, 0);
 //        canvas.scale(scale, scale);
         canvas.drawBitmap(scaledBg, 0, 0, null);
-        canvas.drawBitmap(animationLayer.getNextImage(), 0, 0, null);
+
+        for (Cloud cloud : cloudRing) {
+            cloud.onDraw(canvas);
+        }
+
+        canvas.drawBitmap(tower, 128, 97, null);
 
         for (int i = 0; i < ashes.size(); i++) {
             Ash ash = ashes.get(i);
@@ -137,7 +168,8 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         bg.recycle();
         scaledBg.recycle();
         ash.recycle();
-        animationLayer.recycleBitmap();
+        for (Cloud cloud : cloudRing) cloud.recycleBitmap();
+        cloudRing.clear();
         for (Ash ash : ashes) ash.recycleBitmap();
         ashes.clear();
     }

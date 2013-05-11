@@ -1,8 +1,9 @@
-package com.lutshe.wallpaper.live.halflife;
+package com.lutshe.wallpaper.live.halflife.elements;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import com.lutshe.wallpaper.live.halflife.R;
 
 import java.util.Random;
 
