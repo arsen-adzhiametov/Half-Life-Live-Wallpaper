@@ -7,10 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import com.lutshe.wallpaper.live.halflife.elements.Ash;
-import com.lutshe.wallpaper.live.halflife.elements.Background;
-import com.lutshe.wallpaper.live.halflife.elements.Sky;
-import com.lutshe.wallpaper.live.halflife.elements.Tower;
+import com.lutshe.wallpaper.live.halflife.elements.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +30,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     private List<Ash> ashes = new ArrayList();
     private Tower tower;
     private Sky sky;
+    private Lightning lightning;
     Background background;
 
     public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context, boolean isBetterImage) {
@@ -53,6 +51,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         background = new Background(BitmapFactory.decodeResource(context.getResources(), R.drawable.newversionmy, options));
         tower = new Tower(BitmapFactory.decodeResource(context.getResources(), R.drawable.tower, options));
         sky = new Sky(BitmapFactory.decodeResource(context.getResources(), R.drawable.sky, options));
+        lightning = new Lightning(context, options);
         ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash, options);
 
 //        Log.i(LUTSHE, "Engine constructoring finished. Background init " + bg.getWidth() + "x" + bg.getHeight() + " ash init " + ash.getWidth() + "x" + ash.getHeight());
@@ -76,7 +75,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             background.scaleBackground(scale);
             tower.scaleTower(scale);
             sky.scaleClouds(scale);
-
+            lightning.scaleLights(scale);
         }
     }
 
@@ -127,6 +126,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         canvas.drawColor(Color.WHITE);
         canvas.translate(dx, 0);
         background.onDraw(canvas);
+        lightning.onDraw(canvas);
         sky.onDraw(canvas);
         tower.onDraw(canvas);
 
