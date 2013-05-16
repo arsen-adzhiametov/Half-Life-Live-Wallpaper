@@ -97,7 +97,7 @@ public class LiveWallpaperService extends WallpaperService {
 
         @Override
         public void onOffsetsChanged(float xOffset, float yOffset, float xStep, float yStep, int xPixels, int yPixels) {
-            painting.dx = (painting.width - (painting.scaledBg.getWidth())) * xOffset;
+            painting.dx = (painting.width - (painting.background.scaledBg.getWidth())) * xOffset;
         }
 
         @Override

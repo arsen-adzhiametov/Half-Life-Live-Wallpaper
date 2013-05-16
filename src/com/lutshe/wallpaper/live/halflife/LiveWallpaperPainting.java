@@ -8,7 +8,9 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import com.lutshe.wallpaper.live.halflife.elements.Ash;
-import com.lutshe.wallpaper.live.halflife.elements.Cloud;
+import com.lutshe.wallpaper.live.halflife.elements.Background;
+import com.lutshe.wallpaper.live.halflife.elements.Sky;
+import com.lutshe.wallpaper.live.halflife.elements.Tower;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +29,11 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     volatile float dx = 0.0f;
     float scale;
 
-    private List<Ash> ashes = new ArrayList();
-    private List<Cloud> cloudRing = new ArrayList();
-
     private final Bitmap ash;
-    private final Bitmap cloud;
-    Bitmap tower;
-    Bitmap bg;
-    Bitmap scaledBg;
+    private List<Ash> ashes = new ArrayList();
+    private Tower tower;
+    private Sky sky;
+    Background background;
 
     public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context, boolean isBetterImage) {
         this.surfaceHolder = surfaceHolder;
@@ -51,34 +50,14 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             Log.i(LUTSHE, "ARGB_4444 color applying");
         }
 
-        tower = BitmapFactory.decodeResource(context.getResources(), R.drawable.tower, options);
+        background = new Background(BitmapFactory.decodeResource(context.getResources(), R.drawable.newversionmy, options));
+        tower = new Tower(BitmapFactory.decodeResource(context.getResources(), R.drawable.tower, options));
+        sky = new Sky(BitmapFactory.decodeResource(context.getResources(), R.drawable.sky, options));
         ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash, options);
-        cloud = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky, options);
-        bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.newversionmy, options);
 
-        loadResourcesToMemory();
-
-
-        Log.i(LUTSHE, "Engine constructoring finished. Background init " + bg.getWidth() + "x" + bg.getHeight() + " ash init " + ash.getWidth() + "x" + ash.getHeight());
+//        Log.i(LUTSHE, "Engine constructoring finished. Background init " + bg.getWidth() + "x" + bg.getHeight() + " ash init " + ash.getWidth() + "x" + ash.getHeight());
     }
 
-    private void loadResourcesToMemory() {
-        int radius = 150;
-        cloudRing.add(new Cloud(cloud, 0, radius, true));
-        cloudRing.add(new Cloud(cloud, 50, radius, true));
-        cloudRing.add(new Cloud(cloud, 100, radius, true));
-        cloudRing.add(new Cloud(cloud, 150, radius, true));
-        cloudRing.add(new Cloud(cloud, 200, radius, true));
-        cloudRing.add(new Cloud(cloud, 250, radius, true));
-        cloudRing.add(new Cloud(cloud, 300, radius, true));
-        cloudRing.add(new Cloud(cloud, 350, radius, true));
-
-        radius = 80;
-        cloudRing.add(new Cloud(cloud, 0, radius, false));
-        cloudRing.add(new Cloud(cloud, 100, radius, false));
-        cloudRing.add(new Cloud(cloud, 200, radius, false));
-        cloudRing.add(new Cloud(cloud, 300, radius, false));
-    }
 
     /**
      * Invoke when the surface dimension change
@@ -92,10 +71,12 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         this.height = height;
         synchronized (this) {
             this.notify();
-            scaledBg = this.bg;
-            scaledBg = Bitmap.createScaledBitmap(bg, (int) (bg.getWidth() / ((float) bg.getHeight() / height)), height, true);
-            scale = scaledBg.getWidth() / (1.0f * bg.getWidth());
-//            animationLayer.setActualSize(scale);
+
+            scale = width / (1.0f * background.bg.getWidth());
+            background.scaleBackground(scale);
+            tower.scaleTower(scale);
+            sky.scaleClouds(scale);
+
         }
     }
 
@@ -145,18 +126,13 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     private void doDraw(Canvas canvas) {
         canvas.drawColor(Color.WHITE);
         canvas.translate(dx, 0);
-//        canvas.scale(scale, scale);
-        canvas.drawBitmap(scaledBg, 0, 0, null);
-
-        for (Cloud cloud : cloudRing) {
-            cloud.onDraw(canvas);
-        }
-
-        canvas.drawBitmap(tower, 128, 97, null);
+        background.onDraw(canvas);
+        sky.onDraw(canvas);
+        tower.onDraw(canvas);
 
         for (int i = 0; i < ashes.size(); i++) {
             Ash ash = ashes.get(i);
-            if (ash.y < scaledBg.getHeight() && ash.x < scaledBg.getWidth())
+            if (ash.y < background.scaledBg.getHeight() && ash.x < background.scaledBg.getWidth())
                 ash.onDraw(canvas);
             else {
                 ash.setStartPosition();
@@ -165,11 +141,12 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     }
 
     public void recycleBitmap() {
-        bg.recycle();
-        scaledBg.recycle();
+        background.recycle();
+        sky.recycle();
+        tower.recycle();
         ash.recycle();
-        for (Cloud cloud : cloudRing) cloud.recycleBitmap();
-        cloudRing.clear();
+        for (Sky.Cloud cloud : Sky.clouds) cloud.recycleBitmap();
+        Sky.clouds.clear();
         for (Ash ash : ashes) ash.recycleBitmap();
         ashes.clear();
     }
