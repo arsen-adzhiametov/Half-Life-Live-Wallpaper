@@ -1,16 +1,19 @@
 package com.lutshe.wallpaper.live.halflife.elements;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import com.lutshe.wallpaper.live.halflife.R;
 
 public class Background {
 
     public final Bitmap bg;
     public Bitmap scaledBg;
 
-    public Background(Bitmap bg) {
-        this.bg = bg;
-        scaledBg = this.bg;
+    public Background(Context context, BitmapFactory.Options options) {
+        this.bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.fanal, options);
+        scaledBg = bg;
     }
 
     public void scaleBackground(float scale) {

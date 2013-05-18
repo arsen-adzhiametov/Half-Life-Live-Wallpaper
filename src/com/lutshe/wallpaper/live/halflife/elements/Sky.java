@@ -1,7 +1,10 @@
 package com.lutshe.wallpaper.live.halflife.elements;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import com.lutshe.wallpaper.live.halflife.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,70 +13,71 @@ public class Sky {
 
     public static final String LUTSHE = "lutshe";
 
-    private static final int X_LAYOUT = 100;
-    private static final int Y_LAYOUT = 15;
-    private static final int RADIUS_1 = 80;
+    private static final int X_LAYOUT = 180;
+    private static final int Y_LAYOUT = 50;
+    private static final int DIAMETER_1 = 90;
     private static final float SPEED_1 = 1f;
-    private static final int RADIUS_2 = 140;
+    private static final int DIAMETER_2 = 150;
     private static final float SPEED_2 = 1f;
-    private static final int RADIUS_3 = 200;
-    private static final float SPEED_3 = 2f;
+    private static final int DIAMETER_3 = 210;
+    private static final float SPEED_3 = 1.3f;
 
     private static int layoutX = X_LAYOUT;
     private static int layoutY = Y_LAYOUT;
-    private static int radius1 = RADIUS_1;
-    private static int radius2 = RADIUS_2;
-    private static int radius3 = RADIUS_3;
+    private static int diameter1 = DIAMETER_1;
+    private static int diameter2 = DIAMETER_2;
+    private static int diameter3 = DIAMETER_3;
 
-    private static Bitmap unscaledCloud;
+    private static Bitmap cloudBitmap;
     private static Bitmap cloud;
     public static List<Cloud> clouds = new ArrayList<>();
 
-    public Sky(Bitmap unscaledCloud) {
-        this.unscaledCloud = unscaledCloud;
-        cloud = this.unscaledCloud;
+    public Sky(Context context, BitmapFactory.Options options) {
+        this.cloudBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky, options);
+        cloud = cloudBitmap;
     }
 
     public void scaleClouds(float scale) {
         layoutX = (int) (X_LAYOUT * scale);
         layoutY = (int) (Y_LAYOUT * scale);
-        radius1 = (int) (RADIUS_1 * scale);
-        radius2 = (int) (RADIUS_2 * scale);
-        cloud = Bitmap.createScaledBitmap(unscaledCloud, (int) (unscaledCloud.getWidth() * scale), (int) (unscaledCloud.getHeight() * scale), true);
+        diameter1 = (int) (DIAMETER_1 * scale);
+        diameter2 = (int) (DIAMETER_2 * scale);
+        diameter3 = (int) (DIAMETER_3 * scale);
+        cloud = Bitmap.createScaledBitmap(cloudBitmap, (int) (cloudBitmap.getWidth() * scale), (int) (cloudBitmap.getHeight() * scale), true);
         loadResourcesToMemory();
     }
 
     public static void loadResourcesToMemory() {
         clouds.clear();
 
-        clouds.add(new Cloud(0, radius1, false, SPEED_1));
-        clouds.add(new Cloud(60, radius1, false, SPEED_1));
-        clouds.add(new Cloud(120, radius1, false, SPEED_1));
-        clouds.add(new Cloud(180, radius1, false, SPEED_1));
-        clouds.add(new Cloud(240, radius1, false, SPEED_1));
-        clouds.add(new Cloud(300, radius1, false, SPEED_1));
+        clouds.add(new Cloud(0, diameter1, false, SPEED_1));
+        clouds.add(new Cloud(60, diameter1, false, SPEED_1));
+        clouds.add(new Cloud(120, diameter1, false, SPEED_1));
+        clouds.add(new Cloud(180, diameter1, false, SPEED_1));
+        clouds.add(new Cloud(240, diameter1, false, SPEED_1));
+        clouds.add(new Cloud(300, diameter1, false, SPEED_1));
 
-        clouds.add(new Cloud(0, radius2, true, SPEED_2));
-        clouds.add(new Cloud(45, radius2, true, SPEED_2));
-        clouds.add(new Cloud(90, radius2, true, SPEED_2));
-        clouds.add(new Cloud(135, radius2, true, SPEED_2));
-        clouds.add(new Cloud(180, radius2, true, SPEED_2));
-        clouds.add(new Cloud(225, radius2, true, SPEED_2));
-        clouds.add(new Cloud(270, radius2, true, SPEED_2));
-        clouds.add(new Cloud(315, radius2, true, SPEED_2));
+        clouds.add(new Cloud(0, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(45, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(90, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(135, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(180, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(225, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(270, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(315, diameter2, true, SPEED_2));
 
-        clouds.add(new Cloud(0, radius3, true, SPEED_3));
-        clouds.add(new Cloud(30, radius3, true, SPEED_3));
-        clouds.add(new Cloud(60, radius3, true, SPEED_3));
-        clouds.add(new Cloud(90, radius3, true, SPEED_3));
-        clouds.add(new Cloud(120, radius3, true, SPEED_3));
-        clouds.add(new Cloud(150, radius3, true, SPEED_3));
-        clouds.add(new Cloud(180, radius3, true, SPEED_3));
-        clouds.add(new Cloud(210, radius3, true, SPEED_3));
-        clouds.add(new Cloud(240, radius3, true, SPEED_3));
-        clouds.add(new Cloud(270, radius3, true, SPEED_3));
-        clouds.add(new Cloud(300, radius3, true, SPEED_3));
-        clouds.add(new Cloud(330, radius3, true, SPEED_3));
+        clouds.add(new Cloud(0, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(30, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(60, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(90, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(120, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(150, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(180, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(210, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(240, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(270, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(300, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(330, diameter3, true, SPEED_3));
     }
 
     public void onDraw(Canvas canvas) {
@@ -83,7 +87,7 @@ public class Sky {
     }
 
     public void recycle() {
-        unscaledCloud.recycle();
+        cloudBitmap.recycle();
         cloud.recycle();
     }
 
@@ -128,12 +132,8 @@ public class Sky {
 
         private void setEllipseConstants(int radius) {
             A = radius;
-            B = radius / 2;
+            B = radius * 7 / 12;
         }
 
-        public void recycleBitmap() {
-            unscaledCloud.recycle();
-            cloud.recycle();
-        }
     }
 }

@@ -48,9 +48,9 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
             Log.i(LUTSHE, "ARGB_4444 color applying");
         }
 
-        background = new Background(BitmapFactory.decodeResource(context.getResources(), R.drawable.newversionmy, options));
-        tower = new Tower(BitmapFactory.decodeResource(context.getResources(), R.drawable.tower, options));
-        sky = new Sky(BitmapFactory.decodeResource(context.getResources(), R.drawable.sky, options));
+        background = new Background(context, options);
+        tower = new Tower(context, options);
+        sky = new Sky(context, options);
         lightning = new Lightning(context, options);
         ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash, options);
 
@@ -71,7 +71,7 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         synchronized (this) {
             this.notify();
 
-            scale = width / (1.0f * background.bg.getWidth());
+            scale = height / (1.0f * background.bg.getHeight());
             background.scaleBackground(scale);
             tower.scaleTower(scale);
             sky.scaleClouds(scale);
@@ -145,7 +145,6 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
         sky.recycle();
         tower.recycle();
         ash.recycle();
-        for (Sky.Cloud cloud : Sky.clouds) cloud.recycleBitmap();
         Sky.clouds.clear();
         for (Ash ash : ashes) ash.recycleBitmap();
         ashes.clear();

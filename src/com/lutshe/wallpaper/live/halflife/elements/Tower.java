@@ -1,37 +1,40 @@
 package com.lutshe.wallpaper.live.halflife.elements;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import com.lutshe.wallpaper.live.halflife.R;
 
 public class Tower {
 
-    private final Bitmap tower;
-    private final int X = 130;
-    private final int Y = 100;
+    private final Bitmap towerBitmap;
+    private final int X = 193;
+    private final int Y = 136;
 
-    private Bitmap scaledTower;
-    public int x = 130;
-    public int y = 100;
+    private Bitmap tower;
+    public int x = X;
+    public int y = Y;
 
-    public Tower(Bitmap tower) {
-        this.tower = tower;
-        scaledTower = this.tower;
+    public Tower(Context context, BitmapFactory.Options options) {
+        this.towerBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bigtower, options);
+        tower = towerBitmap;
     }
 
     public void scaleTower(float scale) {
         x = (int) (X * scale);
         y = (int) (Y * scale);
-        scaledTower = Bitmap.createScaledBitmap(tower, (int) (tower.getWidth() * scale), (int) (tower.getHeight() * scale), true);
+        tower = Bitmap.createScaledBitmap(towerBitmap, (int) (towerBitmap.getWidth() * scale), (int) (towerBitmap.getHeight() * scale), true);
     }
 
     public void onDraw(Canvas canvas) {
         canvas.save();
-        canvas.drawBitmap(scaledTower, x, y, null);
+        canvas.drawBitmap(tower, x, y, null);
         canvas.restore();
     }
 
     public void recycle() {
+        towerBitmap.recycle();
         tower.recycle();
-        scaledTower.recycle();
     }
 }
