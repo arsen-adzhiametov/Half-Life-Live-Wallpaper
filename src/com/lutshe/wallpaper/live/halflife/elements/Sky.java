@@ -47,7 +47,7 @@ public class Sky {
         loadResourcesToMemory();
     }
 
-    public static void loadResourcesToMemory() {
+    public synchronized static void loadResourcesToMemory() {
         clouds.clear();
 
         clouds.add(new Cloud(0, diameter1, false, SPEED_1));
@@ -80,7 +80,7 @@ public class Sky {
         clouds.add(new Cloud(330, diameter3, true, SPEED_3));
     }
 
-    public void onDraw(Canvas canvas) {
+    public synchronized void onDraw(Canvas canvas) {
         for (Cloud cloud : clouds) {
             cloud.onDraw(canvas);
         }

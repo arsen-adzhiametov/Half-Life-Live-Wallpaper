@@ -12,7 +12,7 @@ import com.lutshe.wallpaper.live.halflife.elements.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LiveWallpaperPainting extends Thread implements Runnable {
+public class LiveWallpaperPainting extends Thread {
 
     public static final String LUTSHE = "lutshe";
 
@@ -141,14 +141,14 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     }
 
     public void recycleBitmap() {
+        for (Ash ash : ashes) ash.recycleBitmap();
+        ashes.clear();
+        Sky.clouds.clear();
         background.recycleBitmap();
         sky.recycleBitmap();
         tower.recycleBitmap();
-        ash.recycle();
         lightning.recycleBitmap();
-        Sky.clouds.clear();
-        for (Ash ash : ashes) ash.recycleBitmap();
-        ashes.clear();
+        ash.recycle();
     }
 
     /**

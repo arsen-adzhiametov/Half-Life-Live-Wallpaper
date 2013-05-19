@@ -17,7 +17,7 @@ public class LiveWallpaperService extends WallpaperService {
     public Engine onCreateEngine() {
         Log.i(LUTSHE, "onCreateEngine called in WallpaperService, new SampleEngine creating...");
         if (engine != null) {
-            engine.painting.interrupt();
+            engine.painting.stopPainting();
             engine = null;
             Log.i(LUTSHE, "engine recreated successfully!");
         }
