@@ -12,7 +12,7 @@ public class Background {
     public Bitmap scaledBg;
 
     public Background(Context context, BitmapFactory.Options options) {
-        this.bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.fanal, options);
+        this.bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.background, options);
         scaledBg = bg;
     }
 
@@ -26,7 +26,7 @@ public class Background {
         canvas.restore();
     }
 
-    public void recycle() {
+    public void recycleBitmap() {
         bg.recycle();
         scaledBg.recycle();
     }

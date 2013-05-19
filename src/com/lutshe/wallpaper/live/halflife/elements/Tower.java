@@ -17,7 +17,7 @@ public class Tower {
     public int y = Y;
 
     public Tower(Context context, BitmapFactory.Options options) {
-        this.towerBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bigtower, options);
+        this.towerBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tower, options);
         tower = towerBitmap;
     }
 
@@ -33,7 +33,7 @@ public class Tower {
         canvas.restore();
     }
 
-    public void recycle() {
+    public void recycleBitmap() {
         towerBitmap.recycle();
         tower.recycle();
     }

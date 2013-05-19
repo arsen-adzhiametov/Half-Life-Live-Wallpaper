@@ -40,7 +40,7 @@ public class Lightning {
     }
 
     public void onDraw(Canvas canvas) {
-        int index = random.nextInt(10);
+        int index = random.nextInt(20);
         if (index < lights.size())
             lights.get(index).onDraw(canvas);
     }

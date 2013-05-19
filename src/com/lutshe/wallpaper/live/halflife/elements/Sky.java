@@ -86,7 +86,7 @@ public class Sky {
         }
     }
 
-    public void recycle() {
+    public void recycleBitmap() {
         cloudBitmap.recycle();
         cloud.recycle();
     }
@@ -130,9 +130,9 @@ public class Sky {
             startDegree = -1f * startDegree;
         }
 
-        private void setEllipseConstants(int radius) {
-            A = radius;
-            B = radius * 7 / 12;
+        private void setEllipseConstants(int diameter) {
+            A = diameter;
+            B = diameter * 7 / 12;
         }
 
     }

@@ -141,10 +141,11 @@ public class LiveWallpaperPainting extends Thread implements Runnable {
     }
 
     public void recycleBitmap() {
-        background.recycle();
-        sky.recycle();
-        tower.recycle();
+        background.recycleBitmap();
+        sky.recycleBitmap();
+        tower.recycleBitmap();
         ash.recycle();
+        lightning.recycleBitmap();
         Sky.clouds.clear();
         for (Ash ash : ashes) ash.recycleBitmap();
         ashes.clear();
