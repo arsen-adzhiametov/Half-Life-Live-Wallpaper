@@ -31,6 +31,8 @@ public class LiveWallpaperPainting extends Thread {
     private Tower tower;
     private Sky sky;
     private Lightning lightning;
+    private Display display;
+    private CitadelTopFire citadelTopFire;
     Background background;
 
     public LiveWallpaperPainting(SurfaceHolder surfaceHolder, Context context, boolean isBetterImage) {
@@ -44,7 +46,7 @@ public class LiveWallpaperPainting extends Thread {
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;//better image!!! tested on 5" display
             Log.i(LUTSHE, "ARGB_8888 color applying");
         } else {
-            options.inPreferredConfig = Bitmap.Config.ARGB_4444;
+            options.inPreferredConfig = Bitmap.Config.RGB_565;
             Log.i(LUTSHE, "ARGB_4444 color applying");
         }
 
@@ -52,6 +54,8 @@ public class LiveWallpaperPainting extends Thread {
         tower = new Tower(context, options);
         sky = new Sky(context, options);
         lightning = new Lightning(context, options);
+        display = new Display(context, options);
+        citadelTopFire = new CitadelTopFire(context, options);
         ash = BitmapFactory.decodeResource(context.getResources(), R.drawable.ash, options);
 
 //        Log.i(LUTSHE, "Engine constructoring finished. Background init " + bg.getWidth() + "x" + bg.getHeight() + " ash init " + ash.getWidth() + "x" + ash.getHeight());
@@ -76,6 +80,8 @@ public class LiveWallpaperPainting extends Thread {
             tower.scaleTower(scale);
             sky.scaleClouds(scale);
             lightning.scaleLights(scale);
+            display.scaleLights(scale);
+            citadelTopFire.scaleFire(scale);
         }
     }
 
@@ -126,9 +132,11 @@ public class LiveWallpaperPainting extends Thread {
         canvas.drawColor(Color.WHITE);
         canvas.translate(dx, 0);
         background.onDraw(canvas);
+        citadelTopFire.onDraw(canvas);
         lightning.onDraw(canvas);
         sky.onDraw(canvas);
         tower.onDraw(canvas);
+        display.onDraw(canvas);
 
         for (int i = 0; i < ashes.size(); i++) {
             Ash ash = ashes.get(i);

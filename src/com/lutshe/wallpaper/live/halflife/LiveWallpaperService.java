@@ -48,7 +48,7 @@ public class LiveWallpaperService extends WallpaperService {
             SurfaceHolder holder = getSurfaceHolder();
             prefs = LiveWallpaperService.this.getSharedPreferences(PREFERENCES, MODE_MULTI_PROCESS);
             prefs.registerOnSharedPreferenceChangeListener(this);
-            painting = new LiveWallpaperPainting(holder, getApplicationContext(), Boolean.parseBoolean(prefs.getString(PREFERENCE_IMAGE, "false")));
+            painting = new LiveWallpaperPainting(holder, getApplicationContext(), Boolean.parseBoolean(prefs.getString(PREFERENCE_IMAGE, "true")));
             Log.i(LUTSHE, "new SampleEngine created");
         }
 
