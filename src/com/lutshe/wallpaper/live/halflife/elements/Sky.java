@@ -11,8 +11,6 @@ import java.util.List;
 
 public class Sky {
 
-    public static final String LUTSHE = "lutshe";
-
     private static final int X_LAYOUT = 180;
     private static final int Y_LAYOUT = 50;
     private static final int DIAMETER_1 = 90;
@@ -95,39 +93,53 @@ public class Sky {
         private int A;
         private int B;
         private boolean rightSpin;
-        private float startDegree;
+        private float degreePosition;
         private float speed;
         private double x;
         private double y;
 
-        public Cloud(float startDegree, int radius, boolean rightSpin, float speed) {
+        public Cloud(float degreePosition, int radius, boolean rightSpin, float speed) {
             setEllipseConstants(radius);
             this.rightSpin = rightSpin;
-            this.startDegree = startDegree;
+            this.degreePosition = degreePosition;
             this.speed = speed;
             if (!rightSpin) inverseRotate();
         }
 
         private void update() {
-            if (rightSpin) startDegree += speed;
-            else startDegree -= speed;
-            double rad = Math.toRadians(startDegree);
+            if (rightSpin) degreePosition += speed;
+            else degreePosition -= speed;
+            double rad = Math.toRadians(degreePosition);
             x = Math.cos(rad) * A + layoutX;
             y = Math.sin(rad) * B + layoutY;
-            if (Math.abs(startDegree) > 359) startDegree = 0;
+            if (Math.abs(degreePosition) > 359) degreePosition = 0;
         }
 
         public void onDraw(Canvas canvas) {
             update();
             canvas.save();
             canvas.translate((float) x, (float) y);
-            canvas.rotate(startDegree, (float) cloud.getWidth() / 2, (float) cloud.getHeight() / 2);
+            canvas.rotate(degreePosition, (float) cloud.getWidth() / 2, (float) cloud.getHeight() / 2);
+
+            if (degreePosition < 180 && rightSpin) {
+                float f = resizeFromPosition(degreePosition);
+                canvas.scale(f, f);
+            }
             canvas.drawBitmap(cloud, 0, 0, null);
             canvas.restore();
         }
 
+        private float resizeFromPosition(double degreePosition) {
+            double param;
+            if (degreePosition < 90) param = degreePosition / 2;
+            else param = (180 - degreePosition) / 2;
+            double rad = Math.toRadians(param);
+            float f = (float) Math.cos(rad);
+            return f;
+        }
+
         private void inverseRotate() {
-            startDegree = -1f * startDegree;
+            degreePosition = -1f * degreePosition;
         }
 
         private void setEllipseConstants(int diameter) {

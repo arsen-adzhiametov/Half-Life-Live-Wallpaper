@@ -151,12 +151,14 @@ public class LiveWallpaperPainting extends Thread {
     public void recycleBitmap() {
         for (Ash ash : ashes) ash.recycleBitmap();
         ashes.clear();
+        ash.recycle();
         Sky.clouds.clear();
         background.recycleBitmap();
         sky.recycleBitmap();
         tower.recycleBitmap();
         lightning.recycleBitmap();
-        ash.recycle();
+        citadelTopFire.recycleBitmap();
+        display.recycleBitmap();
     }
 
     /**

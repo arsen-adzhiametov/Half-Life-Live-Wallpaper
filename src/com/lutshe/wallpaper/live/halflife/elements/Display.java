@@ -12,11 +12,8 @@ import java.util.Random;
 
 public class Display {
 
-    public static final String LUTSHE = "lutshe";
-
     private final Bitmap screenA;
     private final Bitmap screenB;
-//    private final Bitmap screenC;
 
     private List<Screen> screens = new ArrayList<>();
 
@@ -25,12 +22,9 @@ public class Display {
     public Display(Context context, BitmapFactory.Options options) {
         screenA = BitmapFactory.decodeResource(context.getResources(), R.drawable.screen_a, options);
         screenB = BitmapFactory.decodeResource(context.getResources(), R.drawable.screen_b, options);
-//        screenC = BitmapFactory.decodeResource(context.getResources(), R.drawable.light_c, options);
 
         screens.add(new Screen(screenA, 484, 523));
         screens.add(new Screen(screenB, 484, 523));
-//        screens.add(new CitadelTopFire(screenC, 300, 400));
-
     }
 
     public void scaleLights(float scale) {
@@ -48,7 +42,6 @@ public class Display {
     public void recycleBitmap() {
         screenA.recycle();
         screenB.recycle();
-//        screenC.recycle();
         for (Screen screen : screens) {
             screen.recycleBitmap();
         }
