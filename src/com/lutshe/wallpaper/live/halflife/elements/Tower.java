@@ -9,7 +9,7 @@ import com.lutshe.wallpaper.live.halflife.R;
 public class Tower {
 
     private final Bitmap towerBitmap;
-    private final int X = 193;
+    private final int X = 257;
     private final int Y = 136;
 
     private Bitmap tower;

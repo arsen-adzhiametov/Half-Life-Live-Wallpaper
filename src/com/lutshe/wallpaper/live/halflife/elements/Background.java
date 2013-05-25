@@ -12,7 +12,7 @@ public class Background {
     public Bitmap scaledBg;
 
     public Background(Context context, BitmapFactory.Options options) {
-        this.bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.background, options);
+        this.bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.background_final, options);
         scaledBg = bg;
     }
 

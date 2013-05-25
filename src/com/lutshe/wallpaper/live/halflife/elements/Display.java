@@ -23,8 +23,8 @@ public class Display {
         screenA = BitmapFactory.decodeResource(context.getResources(), R.drawable.screen_a, options);
         screenB = BitmapFactory.decodeResource(context.getResources(), R.drawable.screen_b, options);
 
-        screens.add(new Screen(screenA, 484, 523));
-        screens.add(new Screen(screenB, 484, 523));
+        screens.add(new Screen(screenA, 547, 523));
+        screens.add(new Screen(screenB, 547, 523));
     }
 
     public void scaleLights(float scale) {

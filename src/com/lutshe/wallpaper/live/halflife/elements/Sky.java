@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Sky {
 
-    private static final int X_LAYOUT = 180;
+    private static final int X_LAYOUT = 244;
     private static final int Y_LAYOUT = 50;
     private static final int DIAMETER_1 = 90;
     private static final float SPEED_1 = 1f;
@@ -65,17 +65,23 @@ public class Sky {
         clouds.add(new Cloud(315, diameter2, true, SPEED_2));
 
         clouds.add(new Cloud(0, diameter3, true, SPEED_3));
-        clouds.add(new Cloud(30, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(20, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(40, diameter3, true, SPEED_3));
         clouds.add(new Cloud(60, diameter3, true, SPEED_3));
-        clouds.add(new Cloud(90, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(80, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(100, diameter3, true, SPEED_3));
         clouds.add(new Cloud(120, diameter3, true, SPEED_3));
-        clouds.add(new Cloud(150, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(140, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(160, diameter3, true, SPEED_3));
         clouds.add(new Cloud(180, diameter3, true, SPEED_3));
-        clouds.add(new Cloud(210, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(200, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(220, diameter3, true, SPEED_3));
         clouds.add(new Cloud(240, diameter3, true, SPEED_3));
-        clouds.add(new Cloud(270, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(260, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(280, diameter3, true, SPEED_3));
         clouds.add(new Cloud(300, diameter3, true, SPEED_3));
-        clouds.add(new Cloud(330, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(320, diameter3, true, SPEED_3));
+        clouds.add(new Cloud(340, diameter3, true, SPEED_3));
     }
 
     public synchronized void onDraw(Canvas canvas) {
@@ -120,21 +126,16 @@ public class Sky {
             canvas.save();
             canvas.translate((float) x, (float) y);
             canvas.rotate(degreePosition, (float) cloud.getWidth() / 2, (float) cloud.getHeight() / 2);
-
-            if (degreePosition < 180 && rightSpin) {
-                float f = resizeFromPosition(degreePosition);
-                canvas.scale(f, f);
-            }
+            float f = resizeFromPosition(y);
+            canvas.scale(f, f);
             canvas.drawBitmap(cloud, 0, 0, null);
             canvas.restore();
         }
 
-        private float resizeFromPosition(double degreePosition) {
-            double param;
-            if (degreePosition < 90) param = degreePosition / 2;
-            else param = (180 - degreePosition) / 2;
-            double rad = Math.toRadians(param);
-            float f = (float) Math.cos(rad);
+        private static final float K = (float) (Math.tan(Math.toRadians(340d)));
+
+        private float resizeFromPosition(double y) {
+            float f = (float) ((K * y) + 114) / 100;
             return f;
         }
 
