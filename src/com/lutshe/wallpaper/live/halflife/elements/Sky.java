@@ -11,13 +11,13 @@ import java.util.List;
 
 public class Sky {
 
-    private static final int X_LAYOUT = 244;
-    private static final int Y_LAYOUT = 50;
-    private static final int DIAMETER_1 = 90;
+    private static final int X_LAYOUT = 315;
+    private static final int Y_LAYOUT = 120;
+    private static final int DIAMETER_1 = 100;
     private static final float SPEED_1 = 1f;
-    private static final int DIAMETER_2 = 150;
+    private static final int DIAMETER_2 = 165;
     private static final float SPEED_2 = 1f;
-    private static final int DIAMETER_3 = 210;
+    private static final int DIAMETER_3 = 230;
     private static final float SPEED_3 = 1.3f;
 
     private static int layoutX = X_LAYOUT;
@@ -31,7 +31,7 @@ public class Sky {
     public static List<Cloud> clouds = new ArrayList<>();
 
     public Sky(Context context, BitmapFactory.Options options) {
-        this.cloudBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky, options);
+        this.cloudBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky_opa_opa, options);
         cloud = cloudBitmap;
     }
 
@@ -56,13 +56,14 @@ public class Sky {
         clouds.add(new Cloud(300, diameter1, false, SPEED_1));
 
         clouds.add(new Cloud(0, diameter2, true, SPEED_2));
-        clouds.add(new Cloud(45, diameter2, true, SPEED_2));
-        clouds.add(new Cloud(90, diameter2, true, SPEED_2));
-        clouds.add(new Cloud(135, diameter2, true, SPEED_2));
-        clouds.add(new Cloud(180, diameter2, true, SPEED_2));
-        clouds.add(new Cloud(225, diameter2, true, SPEED_2));
-        clouds.add(new Cloud(270, diameter2, true, SPEED_2));
-        clouds.add(new Cloud(315, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(40, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(80, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(120, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(160, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(200, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(240, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(280, diameter2, true, SPEED_2));
+        clouds.add(new Cloud(320, diameter2, true, SPEED_2));
 
         clouds.add(new Cloud(0, diameter3, true, SPEED_3));
         clouds.add(new Cloud(20, diameter3, true, SPEED_3));
@@ -125,8 +126,8 @@ public class Sky {
             update();
             canvas.save();
             canvas.translate((float) x, (float) y);
-            canvas.rotate(degreePosition, (float) cloud.getWidth() / 2, (float) cloud.getHeight() / 2);
             float f = resizeFromPosition(y);
+            canvas.rotate(degreePosition, (float) cloud.getWidth() * f / 2f, (float) cloud.getHeight() * f / 2f);
             canvas.scale(f, f);
             canvas.drawBitmap(cloud, 0, 0, null);
             canvas.restore();
@@ -135,7 +136,7 @@ public class Sky {
         private static final float K = (float) (Math.tan(Math.toRadians(340d)));
 
         private float resizeFromPosition(double y) {
-            float f = (float) ((K * y) + 114) / 100;
+            float f = (float) ((K * y) + 170) / 100;
             return f;
         }
 
@@ -145,7 +146,7 @@ public class Sky {
 
         private void setEllipseConstants(int diameter) {
             A = diameter;
-            B = diameter * 7 / 12;
+            B = diameter * 6 / 12;
         }
 
     }

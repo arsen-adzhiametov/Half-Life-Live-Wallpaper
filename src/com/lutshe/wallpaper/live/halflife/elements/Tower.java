@@ -9,15 +9,15 @@ import com.lutshe.wallpaper.live.halflife.R;
 public class Tower {
 
     private final Bitmap towerBitmap;
-    private final int X = 257;
-    private final int Y = 136;
+    private final int X = 356;
+    private final int Y = 250;
 
     private Bitmap tower;
     public int x = X;
     public int y = Y;
 
     public Tower(Context context, BitmapFactory.Options options) {
-        this.towerBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tower, options);
+        this.towerBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tower_wide, options);
         tower = towerBitmap;
     }
 

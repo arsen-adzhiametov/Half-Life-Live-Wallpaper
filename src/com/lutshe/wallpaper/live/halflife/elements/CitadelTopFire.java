@@ -11,8 +11,8 @@ import java.util.List;
 
 public class CitadelTopFire {
 
-    private static final int X_LAYOUT = 243;
-    private static final int Y_LAYOUT = 102;
+    private static final int X_LAYOUT = 340;
+    private static final int Y_LAYOUT = 216;
 
     private static int layoutX = X_LAYOUT;
     private static int layoutY = Y_LAYOUT;

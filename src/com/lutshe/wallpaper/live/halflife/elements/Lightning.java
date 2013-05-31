@@ -27,9 +27,9 @@ public class Lightning {
         lightB = BitmapFactory.decodeResource(context.getResources(), R.drawable.light_b, options);
         lightC = BitmapFactory.decodeResource(context.getResources(), R.drawable.light_c, options);
 
-        lights.add(new Light(lightA, 64, 100));
-        lights.add(new Light(lightB, 264, 100));
-        lights.add(new Light(lightC, 14, 0));
+        lights.add(new Light(lightA, 150, 200));
+        lights.add(new Light(lightB, 350, 200));
+        lights.add(new Light(lightC, 100, 100));
 
     }
 

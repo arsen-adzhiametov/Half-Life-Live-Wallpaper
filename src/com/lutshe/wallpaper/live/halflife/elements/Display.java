@@ -23,8 +23,8 @@ public class Display {
         screenA = BitmapFactory.decodeResource(context.getResources(), R.drawable.screen_a, options);
         screenB = BitmapFactory.decodeResource(context.getResources(), R.drawable.screen_b, options);
 
-        screens.add(new Screen(screenA, 547, 523));
-        screens.add(new Screen(screenB, 547, 523));
+        screens.add(new Screen(screenA));
+        screens.add(new Screen(screenB));
     }
 
     public void scaleLights(float scale) {
@@ -34,7 +34,7 @@ public class Display {
     }
 
     public void onDraw(Canvas canvas) {
-        int index = random.nextInt(10);
+        int index = random.nextInt(2);
         if (index < screens.size())
             screens.get(index).onDraw(canvas);
     }
@@ -49,8 +49,8 @@ public class Display {
 
     private static class Screen {
 
-        private final int X_LAYOUT;
-        private final int Y_LAYOUT;
+        private static final int X_LAYOUT = 581;
+        private static final int Y_LAYOUT = 542;
 
         private int layoutX;
         private int layoutY;
@@ -58,13 +58,11 @@ public class Display {
         private final Bitmap light;
         private Bitmap scaledLight;
 
-        public Screen(Bitmap light, int x, int y) {
+        public Screen(Bitmap light) {
             this.light = light;
             scaledLight = this.light;
-            this.X_LAYOUT = x;
-            this.Y_LAYOUT = y;
-            this.layoutX = x;
-            this.layoutY = y;
+            this.layoutX = X_LAYOUT;
+            this.layoutY = Y_LAYOUT;
         }
 
         public void scaleLight(float scale) {
