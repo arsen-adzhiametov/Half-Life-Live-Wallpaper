@@ -14,6 +14,7 @@ public class Display {
 
     private final Bitmap screenA;
     private final Bitmap screenB;
+    private final Bitmap screenC;
 
     private List<Screen> screens = new ArrayList<>();
 
@@ -22,9 +23,11 @@ public class Display {
     public Display(Context context, BitmapFactory.Options options) {
         screenA = BitmapFactory.decodeResource(context.getResources(), R.drawable.screen_a, options);
         screenB = BitmapFactory.decodeResource(context.getResources(), R.drawable.screen_b, options);
+        screenC = BitmapFactory.decodeResource(context.getResources(), R.drawable.screen_c, options);
 
         screens.add(new Screen(screenA));
         screens.add(new Screen(screenB));
+        screens.add(new Screen(screenC));
     }
 
     public void scaleLights(float scale) {
@@ -34,7 +37,7 @@ public class Display {
     }
 
     public void onDraw(Canvas canvas) {
-        int index = random.nextInt(2);
+        int index = random.nextInt(3);
         if (index < screens.size())
             screens.get(index).onDraw(canvas);
     }
@@ -55,12 +58,12 @@ public class Display {
         private int layoutX;
         private int layoutY;
 
-        private final Bitmap light;
-        private Bitmap scaledLight;
+        private final Bitmap screen;
+        private Bitmap scaledScreen;
 
-        public Screen(Bitmap light) {
-            this.light = light;
-            scaledLight = this.light;
+        public Screen(Bitmap screen) {
+            this.screen = screen;
+            scaledScreen = this.screen;
             this.layoutX = X_LAYOUT;
             this.layoutY = Y_LAYOUT;
         }
@@ -68,18 +71,18 @@ public class Display {
         public void scaleLight(float scale) {
             layoutX = (int) (X_LAYOUT * scale);
             layoutY = (int) (Y_LAYOUT * scale);
-            scaledLight = Bitmap.createScaledBitmap(light, (int) (light.getWidth() * scale), (int) (light.getHeight() * scale), true);
+            scaledScreen = Bitmap.createScaledBitmap(screen, (int) (screen.getWidth() * scale), (int) (screen.getHeight() * scale), true);
         }
 
         public void onDraw(Canvas canvas) {
             canvas.save();
-            canvas.drawBitmap(scaledLight, layoutX, layoutY, null);
+            canvas.drawBitmap(scaledScreen, layoutX, layoutY, null);
             canvas.restore();
         }
 
         public void recycleBitmap() {
-            scaledLight.recycle();
-            light.recycle();
+            scaledScreen.recycle();
+            screen.recycle();
         }
     }
 }

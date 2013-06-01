@@ -11,8 +11,8 @@ import java.util.List;
 
 public class CitadelTopFire {
 
-    private static final int X_LAYOUT = 340;
-    private static final int Y_LAYOUT = 216;
+    private static final int X_LAYOUT = 310;
+    private static final int Y_LAYOUT = 190;
 
     private static int layoutX = X_LAYOUT;
     private static int layoutY = Y_LAYOUT;
@@ -32,12 +32,6 @@ public class CitadelTopFire {
     private final Bitmap fire13;
     private final Bitmap fire14;
     private final Bitmap fire15;
-//    private final Bitmap fire16;
-//    private final Bitmap fire17;
-//    private final Bitmap fire18;
-//    private final Bitmap fire19;
-//    private final Bitmap fire20;
-//    private final Bitmap fire21;
 
     private static int nextIndex = 0;
     private static boolean directionOfMovingIndex = true;
@@ -45,29 +39,23 @@ public class CitadelTopFire {
     private List<Fire> fires = new ArrayList<>();
 
     public CitadelTopFire(Context context, BitmapFactory.Options options) {
-        fire1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_1, options);
-        fire2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_2, options);
-        fire3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_3, options);
-        fire4 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_4, options);
-        fire5 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_5, options);
-        fire6 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_6, options);
-        fire7 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_7, options);
-        fire8 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_8, options);
-        fire9 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_9, options);
-        fire10 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_10, options);
-        fire11 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_11, options);
-        fire12 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_12, options);
-        fire13 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_13, options);
-        fire14 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_14, options);
-        fire15 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_15, options);
-//        fire16 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_16, options);
-//        fire17 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_17, options);
-//        fire18 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_18, options);
-//        fire19 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_19, options);
-//        fire20 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_20, options);
-//        fire21 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire_21, options);
+        fire1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.a, options);
+        fire2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.b, options);
+        fire3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.c, options);
+        fire4 = BitmapFactory.decodeResource(context.getResources(), R.drawable.d, options);
+        fire5 = BitmapFactory.decodeResource(context.getResources(), R.drawable.e, options);
+        fire6 = BitmapFactory.decodeResource(context.getResources(), R.drawable.f, options);
+        fire7 = BitmapFactory.decodeResource(context.getResources(), R.drawable.g, options);
+        fire8 = BitmapFactory.decodeResource(context.getResources(), R.drawable.h, options);
+        fire9 = BitmapFactory.decodeResource(context.getResources(), R.drawable.i, options);
+        fire10 = BitmapFactory.decodeResource(context.getResources(), R.drawable.j, options);
+        fire11 = BitmapFactory.decodeResource(context.getResources(), R.drawable.k, options);
+        fire12 = BitmapFactory.decodeResource(context.getResources(), R.drawable.l, options);
+        fire13 = BitmapFactory.decodeResource(context.getResources(), R.drawable.m, options);
+        fire14 = BitmapFactory.decodeResource(context.getResources(), R.drawable.n, options);
+        fire15 = BitmapFactory.decodeResource(context.getResources(), R.drawable.o, options);
 
-        fires.add(new Fire(fire1));
+//        fires.add(new Fire(fire1));
         fires.add(new Fire(fire2));
         fires.add(new Fire(fire3));
         fires.add(new Fire(fire4));
@@ -81,13 +69,7 @@ public class CitadelTopFire {
         fires.add(new Fire(fire12));
         fires.add(new Fire(fire13));
         fires.add(new Fire(fire14));
-        fires.add(new Fire(fire15));
-//        fires.add(new Fire(fire16));
-//        fires.add(new Fire(fire17));
-//        fires.add(new Fire(fire18));
-//        fires.add(new Fire(fire19));
-//        fires.add(new Fire(fire20));
-//        fires.add(new Fire(fire21));
+//        fires.add(new Fire(fire15));
 
     }
 

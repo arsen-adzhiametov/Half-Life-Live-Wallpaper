@@ -86,7 +86,7 @@ public class Sky {
     }
 
     public synchronized void onDraw(Canvas canvas) {
-        for (Cloud cloud : clouds) {
+        for (Cloud cloud : clouds) {          //concurent modification exception
             cloud.onDraw(canvas);
         }
     }
