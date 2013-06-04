@@ -94,10 +94,15 @@ public class LiveWallpaperPainting extends Thread {
             try {
                 canvas = this.surfaceHolder.lockCanvas(null);
                 synchronized (this.surfaceHolder) {
-                    Thread.sleep(50);
+
                     if (ashes.size() < 50)
                         ashes.add(new Ash(this, ash));
+
+                    long timestamp = System.currentTimeMillis();
                     if (canvas != null) doDraw(canvas);
+                    long drawingTime = System.currentTimeMillis() - timestamp;
+                    long sleepTime = 25 - drawingTime;
+                    if (sleepTime > 0) Thread.sleep(sleepTime);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -125,7 +130,7 @@ public class LiveWallpaperPainting extends Thread {
                 }
             }
         }
-        recycleBitmap();
+        recycleBitmaps();
     }
 
     private void doDraw(Canvas canvas) {
@@ -133,9 +138,9 @@ public class LiveWallpaperPainting extends Thread {
         canvas.translate(dx, 0);
         background.onDraw(canvas);
         citadelTopFire.onDraw(canvas);
-        lightning.onDraw(canvas);
         sky.onDraw(canvas);
         tower.onDraw(canvas);
+        lightning.onDraw(canvas);
         display.onDraw(canvas);
 
         for (int i = 0; i < ashes.size(); i++) {
@@ -148,11 +153,10 @@ public class LiveWallpaperPainting extends Thread {
         }
     }
 
-    public void recycleBitmap() {
+    public void recycleBitmaps() {
         for (Ash ash : ashes) ash.recycleBitmap();
         ashes.clear();
         ash.recycle();
-        Sky.clouds.clear();
         background.recycleBitmap();
         sky.recycleBitmap();
         tower.recycleBitmap();

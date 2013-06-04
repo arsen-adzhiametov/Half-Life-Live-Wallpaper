@@ -14,11 +14,11 @@ public class Sky {
     private static final int X_LAYOUT = 315;
     private static final int Y_LAYOUT = 120;
     private static final int DIAMETER_1 = 100;
-    private static final float SPEED_1 = 1f;
+    private static final float SPEED_1 = 0.4f;
     private static final int DIAMETER_2 = 165;
-    private static final float SPEED_2 = 1f;
+    private static final float SPEED_2 = 0.4f;
     private static final int DIAMETER_3 = 230;
-    private static final float SPEED_3 = 1.3f;
+    private static final float SPEED_3 = 0.6f;
 
     private static int layoutX = X_LAYOUT;
     private static int layoutY = Y_LAYOUT;
@@ -94,6 +94,7 @@ public class Sky {
     public void recycleBitmap() {
         cloudBitmap.recycle();
         cloud.recycle();
+        clouds.clear();
     }
 
     public static class Cloud {

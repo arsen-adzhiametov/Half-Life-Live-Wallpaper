@@ -45,6 +45,7 @@ public class Display {
     public void recycleBitmap() {
         screenA.recycle();
         screenB.recycle();
+        screenC.recycle();
         for (Screen screen : screens) {
             screen.recycleBitmap();
         }
